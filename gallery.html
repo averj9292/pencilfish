@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Pencil Fish Studio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    /* ── Page header ────────────────────────── */
+    .page-header {
+      text-align: center;
+      padding: 3rem 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header .blob {
+      width: 400px; height: 400px;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      opacity: 0.6;
+    }
+
+    .page-header h1 {
+      font-family: 'Kalam', cursive;
+      font-size: clamp(2rem, 5vw, 3rem);
+      position: relative;
+    }
+
+    .page-header p {
+      color: var(--teal-dark);
+      margin-top: 0.4rem;
+      position: relative;
+    }
+
+    /* ── Gallery grid ───────────────────────── */
+    .gallery-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 2rem 4rem;
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .gallery-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2.5px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      background: var(--warm-white);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: cardIn 0.4s ease both;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-5px) rotate(-0.5deg);
+      box-shadow: 5px 9px 0 var(--ink);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-card-info {
+      padding: 0.6rem 0.9rem 0.75rem;
+      border-top: 2px solid var(--teal-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .gallery-card-title {
+      font-family: 'Kalam', cursive;
+      font-size: 0.95rem;
+      color: var(--ink);
+    }
+
+    .gallery-card-price {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--teal-dark);
+      background: var(--teal-light);
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+    }
+
+    /* ── Empty state ─────────────────────────── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--teal-dark);
+    }
+
+    .empty-state .big-emoji { font-size: 4rem; margin-bottom: 1rem; }
+
+    .empty-state h2 {
+      font-family: 'Kalam', cursive;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Lightbox ────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(44, 58, 74, 0.88);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+      backdrop-filter: blur(4px);
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox-inner {
+      max-width: 700px;
+      width: 100%;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 3px solid var(--warm-white);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      background: var(--warm-white);
+      cursor: default;
+      animation: lbIn 0.25s ease;
+    }
+
+    .lightbox-inner img {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      background: var(--bg);
+    }
+
+    .lightbox-footer {
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .lightbox-title {
+      font-family: 'Kalam', cursive;
+      font-size: 1.2rem;
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--warm-white);
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .lightbox-close:hover { transform: rotate(90deg); }
+
+    /* ── Animations ─────────────────────────── */
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes lbIn {
+      from { opacity: 0; transform: scale(0.92); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    @media (max-width: 500px) {
+      .gallery-section { padding: 1rem 1rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a class="nav-logo" href="index.html">
+      <img src="assets/logo.png" alt="Pencil Fish Studio logo" />
+      <span>Pencil Fish<br>Studio</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <div class="blob"></div>
+      <h1>✏️ The Gallery</h1>
+      <p>Click any artwork to get a closer look — then head to Etsy to order.</p>
+    </div>
+
+    <div class="gallery-section">
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- filled by script -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lbClose" aria-label="Close">✕</button>
+    <div class="lightbox-inner" id="lbInner">
+      <img id="lbImg" src="" alt="" />
+      <div class="lightbox-footer">
+        <span class="lightbox-title" id="lbTitle"></span>
+        <a class="btn btn-etsy" id="lbEtsy" href="https://etsy.com" target="_blank" rel="noopener">
+          🛒 Buy on Etsy
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-ig">
+      <a href="https://instagram.com/pencilfishstudio" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        @pencilfishstudio
+      </a>
+    </div>
+    <p><span class="star">★</span> Imagination. Creativity. A Future. <span class="star">★</span></p>
+    <p style="margin-top:0.3rem; opacity:0.6;">© Pencil Fish Studio</p>
+  </footer>
+
+  <script src="gallery-data.js"></script>
+  <script>
+    const grid = document.getElementById('galleryGrid');
+    const lightbox = document.getElementById('lightbox');
+    const lbImg   = document.getElementById('lbImg');
+    const lbTitle = document.getElementById('lbTitle');
+    const lbClose = document.getElementById('lbClose');
+
+    function buildGallery() {
+      if (galleryImages.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="big-emoji">🎨</div>
+            <h2>New art coming soon!</h2>
+            <p>Max is busy drawing. Check back soon — or follow along on Instagram.</p>
+            <br>
+            <a class="btn btn-primary" href="https://instagram.com/pencilfishstudio" target="_blank">
+              Follow @pencilfishstudio
+            </a>
+          </div>`;
+        return;
+      }
+
+      galleryImages.forEach((item, i) => {
+        const card = document.createElement('div');
+        card.className = 'gallery-card';
+        card.style.animationDelay = `${i * 0.06}s`;
+        card.innerHTML = `
+          <img src="gallery/${item.src}" alt="${item.title}" loading="lazy" />
+          <div class="gallery-card-info">
+            <span class="gallery-card-title">${item.title}</span>
+            <span class="gallery-card-price">${item.price}</span>
+          </div>`;
+        card.addEventListener('click', () => openLightbox(item));
+        grid.appendChild(card);
+      });
+    }
+
+    function openLightbox(item) {
+      lbImg.src   = `gallery/${item.src}`;
+      lbImg.alt   = item.title;
+      lbTitle.textContent = `${item.title} — ${item.price}`;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    buildGallery();
+  </script>
+
+</body>
+</html>

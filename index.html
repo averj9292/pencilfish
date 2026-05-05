@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pencil Fish Studio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    /* ── Hero ───────────────────────────────── */
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+      overflow: hidden;
+    }
+
+    .hero .blob-1 {
+      width: 500px; height: 500px;
+      top: -100px; left: -120px;
+    }
+    .hero .blob-2 {
+      width: 380px; height: 380px;
+      bottom: -80px; right: -80px;
+      background: radial-gradient(circle, rgba(232,184,75,0.12), transparent 70%);
+    }
+
+    .hero-logo {
+      width: 200px;
+      margin: 0 auto 1.5rem;
+      animation: floatIn 0.8s ease both;
+    }
+
+    .hero-tagline {
+      font-family: 'Kalam', cursive;
+      font-size: clamp(1.6rem, 5vw, 2.8rem);
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 0.75rem;
+      animation: floatIn 0.9s 0.1s ease both;
+    }
+
+    .hero-sub {
+      color: var(--teal-dark);
+      font-size: 1.05rem;
+      max-width: 480px;
+      margin: 0 auto 2rem;
+      animation: floatIn 0.9s 0.2s ease both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: floatIn 0.9s 0.3s ease both;
+    }
+
+    /* ── Featured strip ─────────────────────── */
+    .featured {
+      background: var(--warm-white);
+      border-top: 2px solid var(--teal-light);
+      border-bottom: 2px solid var(--teal-light);
+    }
+
+    .featured .section-title { text-align: center; }
+    .featured .section-sub   { text-align: center; }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .featured-card {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 2.5px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      background: var(--warm-white);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .featured-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 4px 8px 0 var(--ink);
+    }
+
+    .featured-card .placeholder {
+      aspect-ratio: 1;
+      background: var(--teal-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .featured-card img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+    }
+
+    .featured-card-label {
+      padding: 0.6rem 0.8rem;
+      font-family: 'Kalam', cursive;
+      font-size: 0.95rem;
+      border-top: 2px solid var(--teal-light);
+      color: var(--ink);
+    }
+
+    .featured-footer {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    /* ── Why buy section ────────────────────── */
+    .why {
+      text-align: center;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .why-card {
+      background: var(--warm-white);
+      border: 2.5px solid var(--teal-light);
+      border-radius: 16px;
+      padding: 1.5rem 1rem;
+    }
+
+    .why-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+
+    .why-card h3 {
+      font-family: 'Kalam', cursive;
+      font-size: 1.1rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .why-card p { font-size: 0.88rem; color: var(--teal-dark); }
+
+    /* ── Animations ─────────────────────────── */
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ─────────────────────────── */
+    @media (max-width: 700px) {
+      .featured-grid { grid-template-columns: 1fr 1fr; }
+      .featured-grid .featured-card:last-child { display: none; }
+      .why-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .featured-grid { grid-template-columns: 1fr; }
+      .featured-grid .featured-card:last-child { display: block; }
+      .hero-logo { width: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a class="nav-logo" href="index.html">
+      <img src="assets/logo.png" alt="Pencil Fish Studio logo" />
+      <span>Pencil Fish<br>Studio</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <img class="hero-logo" src="assets/logo.png" alt="Pencil Fish Studio" />
+      <h1 class="hero-tagline">Art made with<br>heart ✏️🐟</h1>
+      <p class="hero-sub">
+        Original drawings and prints by Max — a 7-year-old artist
+        who draws every single day.
+      </p>
+      <div class="hero-buttons">
+        <a class="btn btn-etsy" href="https://etsy.com" target="_blank" rel="noopener">
+          🛒 Shop on Etsy
+        </a>
+        <a class="btn btn-secondary" href="gallery.html">See the Art</a>
+      </div>
+    </section>
+
+    <!-- Featured Artwork -->
+    <section class="featured">
+      <div class="section">
+        <h2 class="section-title"><span class="star">★</span> Fresh from the Studio</h2>
+        <p class="section-sub">New drawings added all the time.</p>
+        <div class="featured-grid" id="featuredGrid">
+          <!-- filled by script below -->
+        </div>
+        <div class="featured-footer">
+          <a class="btn btn-primary" href="gallery.html">View Full Gallery</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Buy -->
+    <section class="why">
+      <div class="section">
+        <h2 class="section-title">Why people love Pencil Fish</h2>
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon">🎨</div>
+            <h3>100% Original</h3>
+            <p>Every piece is drawn by hand. No two are exactly the same.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">💛</div>
+            <h3>Made with Love</h3>
+            <p>Max draws because he loves it. That energy goes into every line.</p>
+          </div>
+          <div class="why-card">
+            <div class="why-icon">🖨️</div>
+            <h3>Digital or Paper</h3>
+            <p>Download and print at home, or order a ready-to-hang paper print.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-ig">
+      <a href="https://instagram.com/pencilfishstudio" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        @pencilfishstudio
+      </a>
+    </div>
+    <p><span class="star">★</span> Imagination. Creativity. A Future. <span class="star">★</span></p>
+    <p style="margin-top:0.3rem; opacity:0.6;">© Pencil Fish Studio</p>
+  </footer>
+
+  <script src="gallery-data.js"></script>
+  <script>
+    // Populate the featured grid with the first 3 gallery images
+    const grid = document.getElementById('featuredGrid');
+
+    function buildFeatured() {
+      const items = galleryImages.slice(0, 3);
+
+      if (items.length === 0) {
+        // Show placeholder cards until artwork is added
+        const placeholders = [
+          { emoji: '🐟', label: 'Coming soon…' },
+          { emoji: '🌊', label: 'Coming soon…' },
+          { emoji: '✏️', label: 'Coming soon…' },
+        ];
+        placeholders.forEach(p => {
+          grid.innerHTML += `
+            <div class="featured-card">
+              <div class="placeholder">${p.emoji}</div>
+              <div class="featured-card-label">${p.label}</div>
+            </div>`;
+        });
+        return;
+      }
+
+      items.forEach(item => {
+        grid.innerHTML += `
+          <a class="featured-card" href="gallery.html">
+            <img src="gallery/${item.src}" alt="${item.title}" loading="lazy" />
+            <div class="featured-card-label">${item.title} — ${item.price}</div>
+          </a>`;
+      });
+    }
+
+    buildFeatured();
+  </script>
+
+</body>
+</html>

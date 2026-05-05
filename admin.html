@@ -190,7 +190,10 @@
     .pending-fields input.field-title { flex: 1; min-width: 140px; }
     .pending-fields input.field-price { width: 70px; }
 
-    .pending-remove {
+    .pending-fields input.field-title:placeholder-shown {
+      border-color: var(--gold);
+      background: #fffbf0;
+    }
       background: none;
       border: 2px solid #e0b0a0;
       border-radius: 8px;
@@ -362,14 +365,15 @@
 
         <div class="field">
           <label>Personal Access Token</label>
-          <input id="cfgToken" type="password" placeholder="github_pat_..." />
+          <input id="cfgToken" type="password" placeholder="ghp_..." />
           <p class="hint">
-            Create one at
-            <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">
-              github.com/settings/tokens
+            Go to
+            <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">
+              github.com/settings/tokens/new
             </a>
-            — choose "Fine-grained token," pick your repo, and give it
-            <strong>Contents: Read and Write</strong> permission. That's it.
+            — use a <strong>Classic token</strong>, give it a name like "pencilfish",
+            set expiration to "No expiration", and check the <strong>repo</strong> box.
+            Click Generate. Copy the token (starts with <code>ghp_</code>) and paste it here.
           </p>
         </div>
 
@@ -554,10 +558,19 @@
         if (!file) { galleryImages = []; }
         else {
           const code = atob(file.content.replace(/\n/g, ''));
-          // Pull the array out of the JS source safely
+          // Pull the array out of the JS source, strip comments, then parse
           const match = code.match(/const galleryImages\s*=\s*(\[[\s\S]*?\]);/);
           if (match) {
-            galleryImages = JSON.parse(match[1]);
+            const cleaned = match[1]
+              .replace(/\/\/[^\n\r]*/g, '')  // strip // comments
+              .replace(/,\s*([\]\}])/g, '$1') // strip trailing commas
+              .trim();
+            // If empty array after stripping
+            if (/^\[\s*\]$/.test(cleaned)) {
+              galleryImages = [];
+            } else {
+              galleryImages = JSON.parse(cleaned);
+            }
           } else {
             galleryImages = [];
           }
@@ -689,7 +702,7 @@
           <img class="pending-thumb" src="${pf.dataUrl}" alt="${pf.title}" />
           <div class="pending-fields">
             <input class="field-title" type="text" value="${escHtml(pf.title)}"
-                   placeholder="Artwork title"
+                   placeholder="👈 Type a title for this one"
                    onchange="pendingFiles[${i}].title = this.value" />
             <input class="field-price" type="text" value="${escHtml(pf.price)}"
                    placeholder="$5"
@@ -809,10 +822,12 @@
     }
 
     function fileNameToTitle(name) {
-      return name
-        .replace(/\.[^.]+$/, '')       // remove extension
-        .replace(/[-_]+/g, ' ')        // dashes/underscores → spaces
-        .replace(/\b\w/g, c => c.toUpperCase()); // title case
+      const base = name.replace(/\.[^.]+$/, '');
+      // iOS/Android UUID pattern — return blank so user has to type a title
+      if (/^[A-F0-9\-]{30,}$/i.test(base) || /^IMG_\d+$/i.test(base)) return '';
+      return base
+        .replace(/[-_]+/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
     }
 
     function safeFilename(name) {

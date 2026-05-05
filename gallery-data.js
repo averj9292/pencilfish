@@ -1,17 +1,7 @@
-// ─────────────────────────────────────────────────────────────
-//  PENCIL FISH STUDIO — Gallery Images
-//  To add artwork: add a new entry to the array below.
-//  Put the image file in the /gallery/ folder first.
-//
-//  Fields:
-//    src   — filename inside the /gallery/ folder
-//    title — name of the artwork (shown on hover)
-//    price — e.g. "$5" (shown on hover)
-// ─────────────────────────────────────────────────────────────
+// Pencil Fish Studio — Gallery Data
+// Managed via admin.html — do not edit by hand
 
 const galleryImages = [
-  // { src: "fish.jpg",       title: "Swimming Fish",    price: "$5" },
-  // { src: "dragon.jpg",     title: "Blue Dragon",      price: "$5" },
-  // { src: "forest.jpg",     title: "Enchanted Forest", price: "$5" },
-  // Add your artwork below — remove the "//" at the start of each line!
+  { src: "af6b4603-4fb9-4f2d-95a2-85c32fb0fee6.jpeg", title: "", price: "$10" },
+  { src: "ae485a0e-48a3-4ee7-96f4-6a62064423a0.jpeg", title: "", price: "$10" }
 ];

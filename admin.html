@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio Admin — Pencil Fish Studio</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    body { background: var(--bg); }
+
+    /* ── Top bar ────────────────────────────── */
+    .admin-bar {
+      background: var(--ink);
+      color: var(--warm-white);
+      padding: 0.6rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      gap: 1rem;
+    }
+    .admin-bar strong { font-family: 'Kalam', cursive; font-size: 1rem; }
+    .admin-bar a { color: var(--teal-light); }
+
+    /* ── Screens ─────────────────────────────── */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ── Setup screen ─────────────────────────── */
+    .setup-wrap {
+      max-width: 560px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .setup-card {
+      background: var(--warm-white);
+      border: 2.5px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 5px 5px 0 var(--ink);
+      padding: 2rem;
+    }
+
+    .setup-card h1 {
+      font-family: 'Kalam', cursive;
+      font-size: 1.8rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .setup-card .setup-sub {
+      color: var(--teal-dark);
+      font-size: 0.9rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .field { margin-bottom: 1.1rem; }
+    .field label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.85rem;
+      margin-bottom: 0.35rem;
+      letter-spacing: 0.03em;
+    }
+    .field input {
+      width: 100%;
+      padding: 0.6rem 0.9rem;
+      border: 2px solid var(--teal-light);
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.95rem;
+      background: var(--bg);
+      color: var(--ink);
+      transition: border-color 0.2s;
+    }
+    .field input:focus {
+      outline: none;
+      border-color: var(--teal);
+    }
+    .field .hint {
+      font-size: 0.78rem;
+      color: var(--teal-dark);
+      margin-top: 0.3rem;
+    }
+    .field .hint a { color: var(--teal); font-weight: 700; }
+
+    .setup-actions { margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* ── Main admin screen ────────────────────── */
+    .admin-wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+    }
+
+    .admin-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .admin-header h1 {
+      font-family: 'Kalam', cursive;
+      font-size: 1.8rem;
+    }
+
+    .admin-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+    /* ── Drop zone ───────────────────────────── */
+    .drop-zone {
+      border: 3px dashed var(--teal);
+      border-radius: 18px;
+      background: var(--teal-light);
+      padding: 2.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .drop-zone.drag-over {
+      background: rgba(91,159,170,0.3);
+      border-color: var(--teal-dark);
+    }
+
+    .drop-zone input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .drop-zone h3 { font-family: 'Kalam', cursive; font-size: 1.2rem; color: var(--teal-dark); }
+    .drop-zone p  { font-size: 0.85rem; color: var(--teal-dark); margin-top: 0.25rem; }
+
+    /* ── Pending uploads ─────────────────────── */
+    .pending-section { margin-bottom: 2rem; }
+    .pending-section h2 {
+      font-family: 'Kalam', cursive;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--teal-dark);
+    }
+
+    .pending-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .pending-item {
+      background: var(--warm-white);
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .pending-thumb {
+      width: 64px; height: 64px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid var(--teal-light);
+      flex-shrink: 0;
+    }
+
+    .pending-fields {
+      display: flex;
+      gap: 0.6rem;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .pending-fields input {
+      padding: 0.45rem 0.7rem;
+      border: 2px solid var(--teal-light);
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.9rem;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .pending-fields input.field-title { flex: 1; min-width: 140px; }
+    .pending-fields input.field-price { width: 70px; }
+
+    .pending-fields input.field-title:placeholder-shown {
+      border-color: var(--gold);
+      background: #fffbf0;
+    }
+      background: none;
+      border: 2px solid #e0b0a0;
+      border-radius: 8px;
+      padding: 0.4rem 0.6rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: #c0604a;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .pending-remove:hover { background: #fce8e2; }
+
+    /* ── Current gallery ─────────────────────── */
+    .gallery-section h2 {
+      font-family: 'Kalam', cursive;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .gallery-list { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .gallery-item {
+      background: var(--warm-white);
+      border: 2px solid var(--teal-light);
+      border-radius: 14px;
+      padding: 0.65rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .gallery-thumb {
+      width: 56px; height: 56px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 2px solid var(--teal-light);
+      flex-shrink: 0;
+    }
+
+    .gallery-item-fields {
+      display: flex;
+      gap: 0.6rem;
+      flex: 1;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .gallery-item-fields input {
+      padding: 0.4rem 0.65rem;
+      border: 2px solid var(--teal-light);
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .gallery-item-fields input.field-title { flex: 1; min-width: 130px; }
+    .gallery-item-fields input.field-price { width: 70px; }
+
+    .gallery-item-btns { display: flex; gap: 0.4rem; flex-shrink: 0; }
+
+    .icon-btn {
+      background: none;
+      border: 2px solid var(--teal-light);
+      border-radius: 8px;
+      padding: 0.35rem 0.55rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.15s;
+    }
+
+    .icon-btn:hover { background: var(--teal-light); }
+
+    .icon-btn.danger { border-color: #e0b0a0; color: #c0604a; }
+    .icon-btn.danger:hover { background: #fce8e2; }
+
+    /* ── Empty state ─────────────────────────── */
+    .empty-msg {
+      text-align: center;
+      padding: 2rem;
+      color: var(--teal-dark);
+      font-size: 0.95rem;
+      background: var(--warm-white);
+      border: 2px dashed var(--teal-light);
+      border-radius: 14px;
+    }
+
+    /* ── Toast ───────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--ink);
+      color: var(--warm-white);
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+      white-space: nowrap;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success { background: var(--teal-dark); }
+    .toast.error   { background: #c0604a; }
+
+    /* ── Progress bar ────────────────────────── */
+    .progress-wrap {
+      display: none;
+      background: var(--teal-light);
+      border-radius: 30px;
+      height: 8px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    .progress-wrap.show { display: block; }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--teal);
+      border-radius: 30px;
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* ── Responsive ─────────────────────────── */
+    @media (max-width: 600px) {
+      .admin-header { flex-direction: column; align-items: flex-start; }
+      .pending-fields { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="admin-bar">
+    <strong>🐟 Pencil Fish Admin</strong>
+    <span>
+      <a href="index.html">← Back to site</a>
+      &nbsp;|&nbsp;
+      <a href="#" id="clearSettingsLink">Change GitHub settings</a>
+    </span>
+  </div>
+
+  <!-- ── Setup Screen ──────────────────────────── -->
+  <div class="screen active" id="screenSetup">
+    <div class="setup-wrap">
+      <div class="setup-card">
+        <h1>🔑 Connect to GitHub</h1>
+        <p class="setup-sub">
+          You only need to do this once. Your token is saved in your browser.
+        </p>
+
+        <div class="field">
+          <label>GitHub Username</label>
+          <input id="cfgUsername" type="text" placeholder="e.g. joshdad" />
+        </div>
+
+        <div class="field">
+          <label>Repository Name</label>
+          <input id="cfgRepo" type="text" placeholder="e.g. pencilfishstudio" />
+          <p class="hint">The repo where your site files live.</p>
+        </div>
+
+        <div class="field">
+          <label>Personal Access Token</label>
+          <input id="cfgToken" type="password" placeholder="ghp_..." />
+          <p class="hint">
+            Go to
+            <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">
+              github.com/settings/tokens/new
+            </a>
+            — use a <strong>Classic token</strong>, give it a name like "pencilfish",
+            set expiration to "No expiration", and check the <strong>repo</strong> box.
+            Click Generate. Copy the token (starts with <code>ghp_</code>) and paste it here.
+          </p>
+        </div>
+
+        <div class="setup-actions">
+          <button class="btn btn-primary" onclick="saveSettings()">Connect →</button>
+        </div>
+
+        <p id="setupError" style="color:#c0604a; font-size:0.85rem; margin-top:0.75rem; display:none;"></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Main Admin Screen ─────────────────────── -->
+  <div class="screen" id="screenMain">
+    <div class="admin-wrap">
+
+      <div class="admin-header">
+        <h1>🎨 Gallery Manager</h1>
+        <div class="admin-actions">
+          <button class="btn btn-secondary" onclick="loadGallery()">↻ Refresh</button>
+          <button class="btn btn-primary" id="publishBtn" onclick="publishAll()">
+            🚀 Publish Changes
+          </button>
+        </div>
+      </div>
+
+      <div class="progress-wrap" id="progressWrap">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <!-- Drop zone -->
+      <div class="drop-zone" id="dropZone">
+        <input type="file" id="fileInput" accept="image/*" multiple />
+        <div class="drop-icon">🖼️</div>
+        <h3>Drop Max's artwork here</h3>
+        <p>or click to browse — JPG and PNG work great</p>
+      </div>
+
+      <!-- Pending uploads -->
+      <div class="pending-section" id="pendingSection" style="display:none;">
+        <h2>⏳ Ready to upload (<span id="pendingCount">0</span>)</h2>
+        <div class="pending-list" id="pendingList"></div>
+      </div>
+
+      <!-- Current gallery -->
+      <div class="gallery-section">
+        <h2><span style="color:var(--gold)">★</span> Current Gallery (<span id="galleryCount">0</span>)</h2>
+        <div class="gallery-list" id="galleryList">
+          <div class="empty-msg">Loading gallery…</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // ─────────────────────────────────────────────
+    //  Config & State
+    // ─────────────────────────────────────────────
+    let cfg = {};
+    let galleryImages = []; // current published gallery
+    let pendingFiles  = []; // files staged for upload
+
+    // ─────────────────────────────────────────────
+    //  Init
+    // ─────────────────────────────────────────────
+    (function init() {
+      const saved = localStorage.getItem('pfs_cfg');
+      if (saved) {
+        try {
+          cfg = JSON.parse(saved);
+          if (cfg.username && cfg.repo && cfg.token) {
+            showScreen('screenMain');
+            loadGallery();
+            return;
+          }
+        } catch(e) {}
+      }
+      showScreen('screenSetup');
+    })();
+
+    document.getElementById('clearSettingsLink').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (confirm('Clear GitHub settings?')) {
+        localStorage.removeItem('pfs_cfg');
+        cfg = {};
+        showScreen('screenSetup');
+      }
+    });
+
+    // ─────────────────────────────────────────────
+    //  Screen switching
+    // ─────────────────────────────────────────────
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    // ─────────────────────────────────────────────
+    //  Setup
+    // ─────────────────────────────────────────────
+    async function saveSettings() {
+      const username = document.getElementById('cfgUsername').value.trim();
+      const repo     = document.getElementById('cfgRepo').value.trim();
+      const token    = document.getElementById('cfgToken').value.trim();
+      const errEl    = document.getElementById('setupError');
+
+      if (!username || !repo || !token) {
+        errEl.textContent = 'Please fill in all three fields.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      errEl.style.display = 'none';
+
+      // Quick test call
+      const res = await fetch(`https://api.github.com/repos/${username}/${repo}`, {
+        headers: { Authorization: `token ${token}` }
+      });
+
+      if (!res.ok) {
+        errEl.textContent = `Couldn't connect (${res.status}). Double-check your username, repo name, and token permissions.`;
+        errEl.style.display = 'block';
+        return;
+      }
+
+      cfg = { username, repo, token };
+      localStorage.setItem('pfs_cfg', JSON.stringify(cfg));
+      showScreen('screenMain');
+      loadGallery();
+    }
+
+    // ─────────────────────────────────────────────
+    //  GitHub API helpers
+    // ─────────────────────────────────────────────
+    function ghFetch(path, options = {}) {
+      return fetch(`https://api.github.com/repos/${cfg.username}/${cfg.repo}/contents/${path}`, {
+        ...options,
+        headers: {
+          Authorization: `token ${cfg.token}`,
+          'Content-Type': 'application/json',
+          ...(options.headers || {})
+        }
+      });
+    }
+
+    async function getFile(path) {
+      const res = await ghFetch(path);
+      if (res.status === 404) return null;
+      if (!res.ok) throw new Error(`GitHub error ${res.status}`);
+      return res.json();
+    }
+
+    async function putFile(path, content64, message, sha = null) {
+      const body = { message, content: content64 };
+      if (sha) body.sha = sha;
+      const res = await ghFetch(path, { method: 'PUT', body: JSON.stringify(body) });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.message || `GitHub error ${res.status}`);
+      }
+      return res.json();
+    }
+
+    async function deleteFile(path, sha, message) {
+      const res = await ghFetch(path, {
+        method: 'DELETE',
+        body: JSON.stringify({ message, sha })
+      });
+      if (!res.ok) throw new Error(`Delete failed ${res.status}`);
+    }
+
+    // ─────────────────────────────────────────────
+    //  Load gallery from gallery-data.js in repo
+    // ─────────────────────────────────────────────
+    async function loadGallery() {
+      try {
+        const file = await getFile('gallery-data.js');
+        if (!file) { galleryImages = []; }
+        else {
+          const code = atob(file.content.replace(/\n/g, ''));
+          const match = code.match(/const galleryImages\s*=\s*(\[[\s\S]*?\]);/);
+          if (match) {
+            try {
+              // Evaluate as JS (not JSON) — handles comments, trailing commas, etc.
+              galleryImages = new Function('return ' + match[1])();
+            } catch(e) {
+              galleryImages = [];
+            }
+          } else {
+            galleryImages = [];
+          }
+        }
+      } catch(e) {
+        galleryImages = [];
+        toast('Could not load gallery: ' + e.message, 'error');
+      }
+      renderGallery();
+    }
+
+    // ─────────────────────────────────────────────
+    //  Render
+    // ─────────────────────────────────────────────
+    function renderGallery() {
+      const list = document.getElementById('galleryList');
+      document.getElementById('galleryCount').textContent = galleryImages.length;
+
+      if (galleryImages.length === 0) {
+        list.innerHTML = '<div class="empty-msg">No artwork yet — upload some above!</div>';
+        return;
+      }
+
+      list.innerHTML = '';
+      galleryImages.forEach((img, i) => {
+        // Use cached local dataUrl if available (just uploaded), else GitHub Pages URL
+        const ghPagesBase = `https://${cfg.username}.github.io/${cfg.repo}`;
+        const thumbSrc = img._dataUrl || `${ghPagesBase}/gallery/${img.src}`;
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `
+          <img class="gallery-thumb"
+               src="${thumbSrc}"
+               onerror="this.src='data:image/svg+xml,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'56\\' height=\\'56\\'><rect width=\\'56\\' height=\\'56\\' fill=\\'%23d4e8ec\\'/><text x=\\'50%\\' y=\\'55%\\' font-size=\\'24\\' text-anchor=\\'middle\\' dominant-baseline=\\'middle\\'>🖼️</text></svg>'"
+               alt="${img.title}" />
+          <div class="gallery-item-fields">
+            <input class="field-title" type="text" value="${escHtml(img.title)}"
+                   placeholder="Title" onchange="galleryImages[${i}].title = this.value" />
+            <input class="field-price" type="text" value="${escHtml(img.price)}"
+                   placeholder="$5" onchange="galleryImages[${i}].price = this.value" />
+            <span style="font-size:0.78rem; color:var(--teal-dark); align-self:center;">${img.src}</span>
+          </div>
+          <div class="gallery-item-btns">
+            <button class="icon-btn" title="Move up"    onclick="moveItem(${i}, -1)">↑</button>
+            <button class="icon-btn" title="Move down"  onclick="moveItem(${i},  1)">↓</button>
+            <button class="icon-btn danger" title="Delete" onclick="deleteItem(${i})">✕</button>
+          </div>`;
+        list.appendChild(item);
+      });
+    }
+
+    function moveItem(i, dir) {
+      const j = i + dir;
+      if (j < 0 || j >= galleryImages.length) return;
+      [galleryImages[i], galleryImages[j]] = [galleryImages[j], galleryImages[i]];
+      renderGallery();
+    }
+
+    async function deleteItem(i) {
+      const item = galleryImages[i];
+      if (!confirm(`Delete "${item.title}" from the gallery?\n\nThis also removes the image file from GitHub.`)) return;
+
+      try {
+        setProgress(10);
+        // Get file SHA so we can delete it
+        const file = await getFile(`gallery/${item.src}`);
+        if (file) {
+          await deleteFile(`gallery/${item.src}`, file.sha, `Remove artwork: ${item.src}`);
+        }
+        setProgress(60);
+        galleryImages.splice(i, 1);
+        await saveGalleryData();
+        setProgress(100);
+        toast('Artwork deleted!', 'success');
+        setTimeout(() => setProgress(0), 600);
+      } catch(e) {
+        toast('Delete failed: ' + e.message, 'error');
+        setProgress(0);
+      }
+      renderGallery();
+    }
+
+    // ─────────────────────────────────────────────
+    //  Image resizing (canvas)
+    // ─────────────────────────────────────────────
+    const MAX_PX   = 1400;  // max width or height
+    const QUALITY  = 0.85;  // JPEG quality
+
+    function resizeImage(file) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          let { width: w, height: h } = img;
+          if (w > MAX_PX || h > MAX_PX) {
+            if (w > h) { h = Math.round(h * MAX_PX / w); w = MAX_PX; }
+            else       { w = Math.round(w * MAX_PX / h); h = MAX_PX; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+          URL.revokeObjectURL(url);
+          resolve(canvas.toDataURL('image/jpeg', QUALITY));
+        };
+        img.src = url;
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    //  Pending file picker & drop zone
+    // ─────────────────────────────────────────────
+    const dropZone  = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+
+    dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+    dropZone.addEventListener('drop', e => {
+      e.preventDefault();
+      dropZone.classList.remove('drag-over');
+      addFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', () => addFiles(fileInput.files));
+
+    async function addFiles(files) {
+      for (const file of Array.from(files)) {
+        if (!file.type.startsWith('image/')) continue;
+        const dataUrl = await resizeImage(file);
+        pendingFiles.push({
+          file,
+          dataUrl,
+          title: fileNameToTitle(file.name),
+          price: '$5',
+          safeFilename: safeFilename(file.name)
+        });
+        renderPending();
+      }
+    }
+
+    function renderPending() {
+      const section = document.getElementById('pendingSection');
+      const list    = document.getElementById('pendingList');
+      document.getElementById('pendingCount').textContent = pendingFiles.length;
+
+      if (pendingFiles.length === 0) { section.style.display = 'none'; return; }
+      section.style.display = 'block';
+      list.innerHTML = '';
+
+      pendingFiles.forEach((pf, i) => {
+        const item = document.createElement('div');
+        item.className = 'pending-item';
+        item.innerHTML = `
+          <img class="pending-thumb" src="${pf.dataUrl}" alt="${pf.title}" />
+          <div class="pending-fields">
+            <input class="field-title" type="text" value="${escHtml(pf.title)}"
+                   placeholder="👈 Type a title for this one"
+                   onchange="pendingFiles[${i}].title = this.value" />
+            <input class="field-price" type="text" value="${escHtml(pf.price)}"
+                   placeholder="$5"
+                   onchange="pendingFiles[${i}].price = this.value" />
+            <span style="font-size:0.75rem; color:var(--teal-dark); align-self:center;">
+              → ${pf.safeFilename}
+            </span>
+          </div>
+          <button class="pending-remove" onclick="removePending(${i})">✕</button>`;
+        list.appendChild(item);
+      });
+    }
+
+    function removePending(i) {
+      pendingFiles.splice(i, 1);
+      renderPending();
+    }
+
+    // ─────────────────────────────────────────────
+    //  Publish
+    // ─────────────────────────────────────────────
+    async function publishAll() {
+      if (pendingFiles.length === 0 && galleryImages.length === 0) {
+        toast('Nothing to publish yet!', 'error');
+        return;
+      }
+
+      const btn = document.getElementById('publishBtn');
+      btn.disabled = true;
+      btn.textContent = 'Publishing…';
+
+      try {
+        const total = pendingFiles.length + 1; // +1 for gallery-data.js
+        let done = 0;
+
+        // Upload each pending file
+        for (const pf of pendingFiles) {
+          setProgress(Math.round((done / total) * 100));
+          const base64 = pf.dataUrl.split(',')[1];
+
+          // Check if file already exists (need SHA to overwrite)
+          const existing = await getFile(`gallery/${pf.safeFilename}`);
+          const sha = existing ? existing.sha : null;
+
+          await putFile(
+            `gallery/${pf.safeFilename}`,
+            base64,
+            `Add artwork: ${pf.safeFilename}`,
+            sha
+          );
+
+          // Add to gallery array (avoid duplicates by filename)
+          const already = galleryImages.findIndex(g => g.src === pf.safeFilename);
+          const entry = { src: pf.safeFilename, title: pf.title, price: pf.price, _dataUrl: pf.dataUrl };
+          if (already >= 0) {
+            galleryImages[already] = entry;
+          } else {
+            galleryImages.push(entry);
+          }
+
+          done++;
+        }
+
+        // Save updated gallery-data.js
+        setProgress(Math.round((done / total) * 100));
+        await saveGalleryData();
+        setProgress(100);
+
+        pendingFiles = [];
+        renderPending();
+        renderGallery();
+
+        toast('🚀 Published! Your site will update in about a minute.', 'success');
+        setTimeout(() => setProgress(0), 800);
+
+      } catch(e) {
+        toast('Publish failed: ' + e.message, 'error');
+        setProgress(0);
+      }
+
+      btn.disabled = false;
+      btn.textContent = '🚀 Publish Changes';
+    }
+
+    // ─────────────────────────────────────────────
+    //  Save gallery-data.js to GitHub
+    // ─────────────────────────────────────────────
+    async function saveGalleryData() {
+      const content = generateGalleryJs(galleryImages);
+      const existing = await getFile('gallery-data.js');
+      const sha = existing ? existing.sha : null;
+      await putFile('gallery-data.js', btoa(unescape(encodeURIComponent(content))), 'Update gallery', sha);
+    }
+
+    function generateGalleryJs(images) {
+      const entries = images.map(img =>
+        `  { src: ${JSON.stringify(img.src)}, title: ${JSON.stringify(img.title)}, price: ${JSON.stringify(img.price)} }`
+      ).join(',\n');
+      return `// Pencil Fish Studio — Gallery Data\n// Managed via admin.html — do not edit by hand\n\nconst galleryImages = [\n${entries}\n];\n`;
+    }
+
+    // ─────────────────────────────────────────────
+    //  Utilities
+    // ─────────────────────────────────────────────
+    function setProgress(pct) {
+      const wrap = document.getElementById('progressWrap');
+      const bar  = document.getElementById('progressBar');
+      if (pct === 0) { wrap.classList.remove('show'); bar.style.width = '0%'; return; }
+      wrap.classList.add('show');
+      bar.style.width = pct + '%';
+    }
+
+    function toast(msg, type = '') {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.className = `toast ${type} show`;
+      setTimeout(() => el.classList.remove('show'), 4000);
+    }
+
+    function fileNameToTitle(name) {
+      const base = name.replace(/\.[^.]+$/, '');
+      // iOS/Android UUID pattern — return blank so user has to type a title
+      if (/^[A-F0-9\-]{30,}$/i.test(base) || /^IMG_\d+$/i.test(base)) return '';
+      return base
+        .replace(/[-_]+/g, ' ')
+        .replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function safeFilename(name) {
+      const ext = name.match(/\.[^.]+$/)?.[0]?.toLowerCase() || '.jpg';
+      return name
+        .replace(/\.[^.]+$/, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+        + ext;
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+  </script>
+
+</body>
+</html>

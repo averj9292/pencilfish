@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gallery — Pencil Fish Studio</title>
+  <title>Gallery | Pencil Fish Studio</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <style>
@@ -261,7 +261,7 @@
           <div class="empty-state">
             <div class="big-emoji">🎨</div>
             <h2>New art coming soon!</h2>
-            <p>Max is busy drawing. Check back soon — or follow along on Instagram.</p>
+            <p>Max is busy drawing. Check back soon, or follow along on Instagram.</p>
             <br>
             <a class="btn btn-primary" href="https://instagram.com/pencilfishstudio" target="_blank">
               Follow @pencilfishstudio
@@ -288,7 +288,7 @@
     function openLightbox(item) {
       lbImg.src   = `gallery/${item.src}`;
       lbImg.alt   = item.title;
-      lbTitle.textContent = `${item.title} — ${item.price}`;
+      lbTitle.textContent = `${item.title} · ${item.price}`;
       lbCustom.href = `custom.html?ref=${encodeURIComponent(item.title)}`;
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';

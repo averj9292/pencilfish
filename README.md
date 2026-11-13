@@ -1,4 +1,4 @@
-# Pencil Fish Studio — Website
+# Pencil Fish Studio Website
 
 A 3-page static website for Max's art shop.
 
@@ -41,9 +41,10 @@ The first 3 images automatically show up on the homepage too.
 
 ## Custom Art Form
 
-`custom.html` sends requests by email through [Web3Forms](https://web3forms.com) (free).
-The access key is in the hidden `access_key` field near the top of the form.
-To change which inbox gets requests, generate a new key at web3forms.com and swap it in.
+`custom.html` sends requests (with up to 3 photos) by email through [FormSubmit](https://formsubmit.co) (free).
+The destination address is in the form's `action` URL. The first submission triggers an
+activation email from FormSubmit; click it once, then FormSubmit gives you a random-string
+URL you can use in place of the address to hide it from spammers.
 
 ---
 

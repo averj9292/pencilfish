@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Custom Art — Pencil Fish Studio</title>
-  <meta name="description" content="Request a custom drawing from Max at Pencil Fish Studio — pets, people, creatures, anything you can dream up." />
-  <meta property="og:title" content="Custom Art — Pencil Fish Studio" />
-  <meta property="og:description" content="Request a custom drawing from Max — pets, people, creatures, anything you can dream up." />
+  <title>Custom Art | Pencil Fish Studio</title>
+  <meta name="description" content="Request a custom drawing from Max at Pencil Fish Studio: pets, people, creatures, anything you can dream up." />
+  <meta property="og:title" content="Custom Art | Pencil Fish Studio" />
+  <meta property="og:description" content="Request a custom drawing from Max: pets, people, creatures, anything you can dream up." />
   <meta property="og:image" content="https://pencilfishstudio.ca/assets/logo.png" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="assets/logo.png" />
@@ -95,6 +95,14 @@
 
     .hp { position: absolute; left: -9999px; }
 
+    .field input[type=file] { padding: 0.5rem; background: var(--warm-white); }
+
+    .photo-previews { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
+    .photo-previews img {
+      width: 72px; height: 72px; object-fit: cover;
+      border-radius: 8px; border: 2px solid var(--teal-light);
+    }
+
     .form-msg {
       display: none;
       text-align: center;
@@ -139,17 +147,18 @@
     <div class="custom-wrap">
       <h1>✏️ Ask Max to draw something!</h1>
       <p class="custom-intro">
-        Your pet, your favourite animal, a made-up creature — tell us your idea
+        Your pet, your favourite animal, a made-up creature? Tell us your idea
         and we'll get back to you with a price.
       </p>
 
       <div class="form-card">
-        <form id="customForm" action="https://api.web3forms.com/submit" method="POST">
-          <!-- Web3Forms key: get one free at web3forms.com (it emails it to you) -->
-          <input type="hidden" name="access_key" value="23a43a8d-5639-477d-b5e9-1117dafa3760" />
-          <input type="hidden" name="subject" value="New custom art request — Pencil Fish Studio" />
-          <input type="hidden" name="from_name" value="Pencil Fish Studio website" />
-          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+        <!-- FormSubmit (free, supports photos). Destination inbox is in the action URL. -->
+        <form id="customForm" action="https://formsubmit.co/hello@pencilfishstudio.ca" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="_subject" value="New custom art request | Pencil Fish Studio" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_next" value="https://pencilfishstudio.ca/custom.html?sent=1" />
+          <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" />
 
           <div class="field-row">
             <div class="field">
@@ -188,11 +197,14 @@
             <input id="ref" name="inspired_by" type="text" placeholder="e.g. Giraffe" />
           </div>
 
+          <div class="field">
+            <label for="photos">Photos to work from <span class="optional">(optional, up to 3)</span></label>
+            <input id="photos" name="attachment" type="file" accept="image/*" multiple />
+            <div class="photo-previews" id="photoPreviews"></div>
+          </div>
+
           <button class="btn btn-primary" type="submit" id="submitBtn">Send my request 🐟</button>
           <p class="form-error" id="formError"></p>
-          <p class="form-note">
-            Have a photo to work from? Just mention it — we'll reply by email so you can send it.
-          </p>
         </form>
 
         <div class="form-msg" id="formThanks">
@@ -219,37 +231,72 @@
   </footer>
 
   <script>
-    const form   = document.getElementById('customForm');
-    const btn    = document.getElementById('submitBtn');
-    const errEl  = document.getElementById('formError');
-    const thanks = document.getElementById('formThanks');
+    const form     = document.getElementById('customForm');
+    const btn      = document.getElementById('submitBtn');
+    const errEl    = document.getElementById('formError');
+    const thanks   = document.getElementById('formThanks');
+    const photos   = document.getElementById('photos');
+    const previews = document.getElementById('photoPreviews');
+    const params   = new URLSearchParams(location.search);
+
+    // Back from FormSubmit after a successful send
+    if (params.get('sent')) {
+      form.style.display = 'none';
+      thanks.style.display = 'block';
+    }
 
     // Pre-fill "Saw a piece you liked?" when coming from the gallery (?ref=Giraffe)
-    const ref = new URLSearchParams(location.search).get('ref');
-    if (ref) document.getElementById('ref').value = ref;
+    if (params.get('ref')) document.getElementById('ref').value = params.get('ref');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    // Shrink phone photos so the email stays small (max 1600px, JPEG)
+    const MAX_PHOTOS = 3, MAX_PX = 1600;
+
+    function shrink(file) {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const url = URL.createObjectURL(file);
+        img.onload = () => {
+          let { width: w, height: h } = img;
+          const scale = Math.min(1, MAX_PX / Math.max(w, h));
+          w = Math.round(w * scale); h = Math.round(h * scale);
+          const c = document.createElement('canvas');
+          c.width = w; c.height = h;
+          c.getContext('2d').drawImage(img, 0, 0, w, h);
+          URL.revokeObjectURL(url);
+          c.toBlob(b => resolve(new File([b], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' })), 'image/jpeg', 0.85);
+        };
+        img.onerror = () => { URL.revokeObjectURL(url); resolve(file); }; // e.g. HEIC on desktop: send as-is
+        img.src = url;
+      });
+    }
+
+    photos.addEventListener('change', async () => {
       errEl.style.display = 'none';
+      let files = Array.from(photos.files).filter(f => f.type.startsWith('image/') || /\.heic$/i.test(f.name));
+      if (files.length > MAX_PHOTOS) {
+        errEl.textContent = `Only the first ${MAX_PHOTOS} photos will be sent.`;
+        errEl.style.display = 'block';
+        files = files.slice(0, MAX_PHOTOS);
+      }
+      btn.disabled = true;
+      const small = await Promise.all(files.map(shrink));
+      try {
+        const dt = new DataTransfer();
+        small.forEach(f => dt.items.add(f));
+        photos.files = dt.files;
+      } catch (e) { /* very old browser: originals are sent */ }
+      previews.innerHTML = '';
+      small.forEach(f => {
+        const im = document.createElement('img');
+        im.src = URL.createObjectURL(f);
+        previews.appendChild(im);
+      });
+      btn.disabled = false;
+    });
+
+    form.addEventListener('submit', () => {
       btn.disabled = true;
       btn.textContent = 'Sending…';
-
-      try {
-        const res  = await fetch(form.action, {
-          method: 'POST',
-          headers: { 'Accept': 'application/json' },
-          body: new FormData(form)
-        });
-        const data = await res.json();
-        if (!res.ok || !data.success) throw new Error(data.message || 'Something went wrong');
-        form.style.display = 'none';
-        thanks.style.display = 'block';
-      } catch (err) {
-        errEl.textContent = "Sorry, that didn't send. Please try again, or message us on Instagram.";
-        errEl.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = 'Send my request 🐟';
-      }
     });
   </script>
 

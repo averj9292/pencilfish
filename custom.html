@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Custom Art — Pencil Fish Studio</title>
+  <meta name="description" content="Request a custom drawing from Max at Pencil Fish Studio — pets, people, creatures, anything you can dream up." />
+  <meta property="og:title" content="Custom Art — Pencil Fish Studio" />
+  <meta property="og:description" content="Request a custom drawing from Max — pets, people, creatures, anything you can dream up." />
+  <meta property="og:image" content="https://pencilfishstudios.ca/assets/logo.png" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <style>
+    .custom-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    .custom-wrap h1 {
+      font-family: 'Kalam', cursive;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      text-align: center;
+      line-height: 1.2;
+    }
+
+    .custom-intro {
+      text-align: center;
+      color: var(--teal-dark);
+      margin: 0.5rem auto 2rem;
+      max-width: 480px;
+    }
+
+    .form-card {
+      background: var(--warm-white);
+      border: 2.5px solid var(--ink);
+      border-radius: 18px;
+      box-shadow: 5px 5px 0 var(--ink);
+      padding: 2rem;
+    }
+
+    .field { margin-bottom: 1.2rem; }
+
+    .field label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .field .optional {
+      font-weight: 400;
+      color: var(--teal-dark);
+      font-size: 0.8rem;
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      width: 100%;
+      padding: 0.65rem 0.9rem;
+      border: 2px solid var(--teal-light);
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      background: var(--bg);
+      color: var(--ink);
+      transition: border-color 0.2s;
+    }
+
+    .field textarea { min-height: 120px; resize: vertical; }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: var(--teal);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-note {
+      font-size: 0.82rem;
+      color: var(--teal-dark);
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .form-card .btn { width: 100%; }
+    .form-card .btn:disabled { opacity: 0.6; cursor: wait; transform: none; box-shadow: none; }
+
+    .hp { position: absolute; left: -9999px; }
+
+    .form-msg {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+
+    .form-msg .big { font-size: 3rem; }
+    .form-msg h2 { font-family: 'Kalam', cursive; font-size: 1.6rem; margin: 0.5rem 0; }
+    .form-msg p { color: var(--teal-dark); }
+
+    .form-error {
+      display: none;
+      color: #c0604a;
+      font-size: 0.9rem;
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    @media (max-width: 500px) {
+      .field-row { grid-template-columns: 1fr; gap: 0; }
+      .form-card { padding: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <a class="nav-logo" href="index.html">
+      <img src="assets/logo.png" alt="Pencil Fish Studio logo" />
+      <span>Pencil Fish<br>Studio</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="custom.html" class="active">Custom Art</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="custom-wrap">
+      <h1>✏️ Ask Max to draw something!</h1>
+      <p class="custom-intro">
+        Your pet, your favourite animal, a made-up creature — tell us your idea
+        and we'll get back to you with a price.
+      </p>
+
+      <div class="form-card">
+        <form id="customForm" action="https://api.web3forms.com/submit" method="POST">
+          <!-- Web3Forms key: get one free at web3forms.com (it emails it to you) -->
+          <input type="hidden" name="access_key" value="23a43a8d-5639-477d-b5e9-1117dafa3760" />
+          <input type="hidden" name="subject" value="New custom art request — Pencil Fish Studio" />
+          <input type="hidden" name="from_name" value="Pencil Fish Studio website" />
+          <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" />
+
+          <div class="field-row">
+            <div class="field">
+              <label for="name">Your name</label>
+              <input id="name" name="name" type="text" required autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" required autocomplete="email" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="idea">What should Max draw?</label>
+            <textarea id="idea" name="idea" required
+              placeholder="e.g. My dog Biscuit wearing a superhero cape"></textarea>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="format">Paper or digital?</label>
+              <select id="format" name="format">
+                <option>Original on paper</option>
+                <option>Digital file</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="needed_by">Needed by <span class="optional">(optional)</span></label>
+              <input id="needed_by" name="needed_by" type="text" placeholder="e.g. a birthday in December" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="ref">Saw a piece you liked? <span class="optional">(optional)</span></label>
+            <input id="ref" name="inspired_by" type="text" placeholder="e.g. Giraffe" />
+          </div>
+
+          <button class="btn btn-primary" type="submit" id="submitBtn">Send my request 🐟</button>
+          <p class="form-error" id="formError"></p>
+          <p class="form-note">
+            Have a photo to work from? Just mention it — we'll reply by email so you can send it.
+          </p>
+        </form>
+
+        <div class="form-msg" id="formThanks">
+          <div class="big">🎉</div>
+          <h2>Got it, thank you!</h2>
+          <p>We'll email you soon to talk about your drawing.</p>
+          <br>
+          <a class="btn btn-secondary" href="gallery.html">Back to the Gallery</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-ig">
+      <a href="https://instagram.com/pencilfishstudio" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        @pencilfishstudio
+      </a>
+    </div>
+    <p><span class="star">★</span> Imagination. Creativity. A Future. <span class="star">★</span></p>
+    <p style="margin-top:0.3rem; opacity:0.6;">© Pencil Fish Studio</p>
+  </footer>
+
+  <script>
+    const form   = document.getElementById('customForm');
+    const btn    = document.getElementById('submitBtn');
+    const errEl  = document.getElementById('formError');
+    const thanks = document.getElementById('formThanks');
+
+    // Pre-fill "Saw a piece you liked?" when coming from the gallery (?ref=Giraffe)
+    const ref = new URLSearchParams(location.search).get('ref');
+    if (ref) document.getElementById('ref').value = ref;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errEl.style.display = 'none';
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const res  = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || 'Something went wrong');
+        form.style.display = 'none';
+        thanks.style.display = 'block';
+      } catch (err) {
+        errEl.textContent = "Sorry, that didn't send. Please try again, or message us on Instagram.";
+        errEl.style.display = 'block';
+        btn.disabled = false;
+        btn.textContent = 'Send my request 🐟';
+      }
+    });
+  </script>
+
+</body>
+</html>

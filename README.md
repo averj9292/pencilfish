@@ -9,6 +9,8 @@ pencilfish/
 ├── index.html          ← Homepage
 ├── gallery.html        ← Art gallery
 ├── about.html          ← About Max
+├── custom.html         ← Custom art request form
+├── admin.html          ← Upload artwork (needs GitHub token)
 ├── style.css           ← Shared styles
 ├── gallery-data.js     ← ⭐ EDIT THIS to add artwork
 ├── assets/
@@ -37,10 +39,11 @@ The first 3 images automatically show up on the homepage too.
 
 ---
 
-## Updating the Etsy Link
+## Custom Art Form
 
-Once Max's Etsy shop is live, search for `https://etsy.com` in all 3 HTML files
-and replace with the actual shop URL (e.g. `https://etsy.com/shop/pencilfishstudio`).
+`custom.html` sends requests by email through [Web3Forms](https://web3forms.com) (free).
+The access key is in the hidden `access_key` field near the top of the form.
+To change which inbox gets requests, generate a new key at web3forms.com and swap it in.
 
 ---
 
@@ -53,9 +56,9 @@ and replace with the actual shop URL (e.g. `https://etsy.com/shop/pencilfishstud
 5. Your site will be live at `https://yourusername.github.io/pencilfishstudio`
 
 ### Custom Domain (optional)
-- Buy `pencilfish.ca` or similar from Namecheap (~$12/yr)
-- In GitHub Pages settings, enter the custom domain
-- Follow Namecheap's DNS instructions to point it at GitHub
+- Domain `pencilfishstudios.ca` is registered at Cloudflare
+- DNS: four A records for `@` → 185.199.108–111.153, CNAME `www` → averj9292.github.io (grey cloud / DNS only)
+- GitHub repo → Settings → Pages: custom domain set, Enforce HTTPS on
 
 ---
 

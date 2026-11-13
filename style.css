@@ -135,12 +135,6 @@ main {
   color: var(--ink);
 }
 
-.btn-etsy {
-  background: #f1641e;
-  color: #fff;
-  border-color: #c44e18;
-}
-
 /* ── Footer ──────────────────────────────────── */
 footer {
   position: relative;
@@ -204,4 +198,9 @@ footer .star { color: var(--gold); }
   .nav-logo span { font-size: 1rem; }
   .nav-links a { padding: 0.35rem 0.6rem; font-size: 0.82rem; }
   .section { padding: 2rem 1.2rem; }
+}
+
+@media (max-width: 480px) {
+  nav { flex-direction: column; gap: 0.4rem; }
+  .nav-links { flex-wrap: wrap; justify-content: center; }
 }

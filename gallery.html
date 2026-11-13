@@ -201,6 +201,7 @@
     <ul class="nav-links">
       <li><a href="index.html">Home</a></li>
       <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="custom.html">Custom Art</a></li>
       <li><a href="about.html">About</a></li>
     </ul>
   </nav>
@@ -209,7 +210,7 @@
     <div class="page-header">
       <div class="blob"></div>
       <h1>✏️ The Gallery</h1>
-      <p>Click any artwork to get a closer look — then head to Etsy to order.</p>
+      <p>Tap any artwork for a closer look. Want something like it? Ask Max for a custom piece!</p>
     </div>
 
     <div class="gallery-section">
@@ -226,8 +227,8 @@
       <img id="lbImg" src="" alt="" />
       <div class="lightbox-footer">
         <span class="lightbox-title" id="lbTitle"></span>
-        <a class="btn btn-etsy" id="lbEtsy" href="https://etsy.com" target="_blank" rel="noopener">
-          🛒 Buy on Etsy
+        <a class="btn btn-primary" id="lbCustom" href="custom.html">
+          ✏️ Request one like this
         </a>
       </div>
     </div>
@@ -252,6 +253,7 @@
     const lbImg   = document.getElementById('lbImg');
     const lbTitle = document.getElementById('lbTitle');
     const lbClose = document.getElementById('lbClose');
+    const lbCustom = document.getElementById('lbCustom');
 
     function buildGallery() {
       if (galleryImages.length === 0) {
@@ -287,6 +289,7 @@
       lbImg.src   = `gallery/${item.src}`;
       lbImg.alt   = item.title;
       lbTitle.textContent = `${item.title} — ${item.price}`;
+      lbCustom.href = `custom.html?ref=${encodeURIComponent(item.title)}`;
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     }

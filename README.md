@@ -56,7 +56,7 @@ To change which inbox gets requests, generate a new key at web3forms.com and swa
 5. Your site will be live at `https://yourusername.github.io/pencilfishstudio`
 
 ### Custom Domain (optional)
-- Domain `pencilfishstudios.ca` is registered at Cloudflare
+- Domain `pencilfishstudio.ca` is registered at Cloudflare
 - DNS: four A records for `@` → 185.199.108–111.153, CNAME `www` → averj9292.github.io (grey cloud / DNS only)
 - GitHub repo → Settings → Pages: custom domain set, Enforce HTTPS on
 

@@ -2,6 +2,11 @@
 // Managed via admin.html, do not edit by hand
 
 const galleryImages = [
-  { src: "af6b4603-4fb9-4f2d-95a2-85c32fb0fee6.jpeg", title: "Giraffe", price: "$10" },
-  { src: "ae485a0e-48a3-4ee7-96f4-6a62064423a0.jpeg", title: "Puppy", price: "$10" }
+  { src: "octapus.jpg", title: "Octopus", price: "$10" },
+  { src: "tiger.jpg", title: "Tiger", price: "$10" },
+  { src: "panda.jpg", title: "Panda", price: "$10" },
+  { src: "lion.jpg", title: "Lion", price: "$10" },
+  { src: "elephant.jpg", title: "Elephant", price: "$10" },
+  { src: "apple.jpg", title: "Apple", price: "$10" },
+  { src: "santa.jpg", title: "Santa", price: "$10" }
 ];

@@ -9,7 +9,9 @@ pencilfish/
 ├── index.html          ← Homepage
 ├── gallery.html        ← Art gallery
 ├── about.html          ← About Max
-├── custom.html         ← Custom art request form
+├── custom.html         ← Order page (Max's art, custom drawings, your kid's art)
+├── prices.js           ← ⭐ Prices for every product
+├── icons.js            ← Hand-drawn icon set
 ├── admin.html          ← Upload artwork (needs GitHub token)
 ├── style.css           ← Shared styles
 ├── gallery-data.js     ← ⭐ EDIT THIS to add artwork
@@ -39,7 +41,12 @@ The first 3 images automatically show up on the homepage too.
 
 ---
 
-## Custom Art Form
+## Prices
+
+All prices live in `prices.js` (print, card, magnetic frame, ornament, custom drawing).
+Change a number there and the order page and totals update everywhere.
+
+## Order Form
 
 `custom.html` sends requests (with up to 3 photos) by email through [FormSubmit](https://formsubmit.co) (free).
 The destination address is in the form's `action` URL. The first submission triggers an

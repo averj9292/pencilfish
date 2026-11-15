@@ -119,7 +119,7 @@
     }
 
     /* ── Made just for you ──────────────────── */
-    .makes { text-align: center; }
+    .makes { text-align: center; scroll-margin-top: 70px; }
 
     .makes-grid {
       display: grid;
@@ -139,7 +139,21 @@
     .make-card:hover { transform: translateY(-4px); box-shadow: 4px 8px 0 var(--ink); }
     .make-emoji { margin-bottom: 0.5rem; line-height: 0; }
     .make-card h3 { font-family: 'Kalam', cursive; font-size: 1.2rem; margin-bottom: 0.3rem; }
-    .make-card p { font-size: 0.9rem; color: var(--teal-dark); }
+    .make-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .make-card p { font-size: 0.9rem; color: var(--teal-dark); flex: 1; }
+    .make-price {
+      margin-top: 0.8rem;
+      font-family: 'Kalam', cursive;
+      font-weight: 700;
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      padding: 0.1rem 0.8rem;
+      border-radius: 20px;
+    }
 
     /* ── Why buy section ────────────────────── */
     .why {
@@ -205,7 +219,7 @@
     <ul class="nav-links">
       <li><a href="index.html" class="active">Home</a></li>
       <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="custom.html">Custom Art</a></li>
+      <li><a href="custom.html">Order</a></li>
       <li><a href="about.html">About</a></li>
     </ul>
   </nav>
@@ -224,7 +238,7 @@
       </p>
       <div class="hero-buttons">
         <a class="btn btn-primary" href="gallery.html"><i data-icon="frame"></i>Shop Prints</a>
-        <a class="btn btn-secondary" href="custom.html"><i data-icon="pencil"></i>Order Something Custom</a>
+        <a class="btn btn-secondary" href="#ways"><i data-icon="heart"></i>Ways to Order</a>
       </div>
     </section>
 
@@ -243,25 +257,28 @@
     </section>
 
     <!-- Custom pieces -->
-    <section class="makes">
+    <section class="makes" id="ways">
       <div class="section">
-        <h2 class="section-title"><span class="star"><i data-icon="star"></i></span> Made just for you</h2>
-        <p class="section-sub">Pick one and tell Max what to draw.</p>
+        <h2 class="section-title"><span class="star"><i data-icon="star"></i></span> Three ways to order</h2>
+        <p class="section-sub">Magnetic picture frames and ornaments are about 3 inches.</p>
         <div class="makes-grid">
-          <a class="make-card" href="custom.html?item=drawing">
+          <a class="make-card" href="custom.html?path=max">
+            <div class="make-emoji"><i data-icon="frame" class="xl"></i></div>
+            <h3>Max's Art</h3>
+            <p>Any drawing from the gallery as a print, card, magnetic picture frame or ornament.</p>
+            <span class="make-price">from $2</span>
+          </a>
+          <a class="make-card" href="custom.html?path=custom">
             <div class="make-emoji"><i data-icon="pencil" class="xl"></i></div>
             <h3>Custom Drawings</h3>
-            <p>Your pet, your favourite animal, or something totally made up.</p>
+            <p>Your pet, your favourite animal, or something totally made up. Max draws it, we print it.</p>
+            <span class="make-price">$15</span>
           </a>
-          <a class="make-card" href="custom.html?item=magnet">
-            <div class="make-emoji"><i data-icon="magnet" class="xl"></i></div>
-            <h3>Magnets</h3>
-            <p>Max's art for your fridge. Great little gifts.</p>
-          </a>
-          <a class="make-card" href="custom.html?item=ornament">
-            <div class="make-emoji"><i data-icon="ornament" class="xl"></i></div>
-            <h3>Ornaments</h3>
-            <p>One-of-a-kind decorations for the tree.</p>
+          <a class="make-card" href="custom.html?path=kids">
+            <div class="make-emoji"><i data-icon="heart" class="xl"></i></div>
+            <h3>Your Kid's Art</h3>
+            <p>Send us a photo of your child's drawing and we'll turn it into an ornament or magnetic picture frame.</p>
+            <span class="make-price">$15</span>
           </a>
         </div>
       </div>
@@ -284,8 +301,8 @@
           </div>
           <div class="why-card">
             <div class="why-icon"><i data-icon="pencil" class="lg"></i></div>
-            <h3>Custom Requests</h3>
-            <p>Drawings, magnets and ornaments made to order. <a href="custom.html" style="color:var(--teal-dark);font-weight:700;text-decoration:underline;">Ask Max!</a></p>
+            <h3>Keepsakes Too</h3>
+            <p>Prints, cards, ornaments and magnetic picture frames. <a href="custom.html" style="color:var(--teal-dark);font-weight:700;text-decoration:underline;">Order one!</a></p>
           </div>
         </div>
       </div>

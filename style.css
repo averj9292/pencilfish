@@ -233,6 +233,7 @@ footer .star { color: var(--gold); }
 .pf-icon .k     { fill: var(--ink); }
 .pf-icon .n     { stroke: none; }
 .pf-icon .thick { stroke-width: 2.8; }
+.pf-icon .bold  { stroke-width: 2.4; }
 
 .pf-icon.lg  { width: 2.6rem; height: 2.6rem; }
 .pf-icon.xl  { width: 3.6rem; height: 3.6rem; }

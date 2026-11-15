@@ -153,6 +153,13 @@
       flex-wrap: wrap;
     }
 
+    .lightbox-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+
+    @media (max-width: 500px) {
+      .lightbox-actions { width: 100%; }
+      .lightbox-actions .btn { flex: 1; padding: 0.6rem 0.8rem; font-size: 0.95rem; }
+    }
+
     .lightbox-title {
       font-family: 'Kalam', cursive;
       font-size: 1.2rem;
@@ -210,7 +217,7 @@
     <div class="page-header">
       <div class="blob"></div>
       <h1>✏️ The Gallery</h1>
-      <p>Tap any artwork for a closer look. Want something like it? Ask Max for a custom piece!</p>
+      <p>Every drawing is available as a print. Tap one to order it, or ask Max for a custom one like it.</p>
     </div>
 
     <div class="gallery-section">
@@ -227,9 +234,10 @@
       <img id="lbImg" src="" alt="" />
       <div class="lightbox-footer">
         <span class="lightbox-title" id="lbTitle"></span>
-        <a class="btn btn-primary" id="lbCustom" href="custom.html">
-          ✏️ Request one like this
-        </a>
+        <div class="lightbox-actions">
+          <a class="btn btn-primary" id="lbOrder" href="custom.html">🖼️ Order this print</a>
+          <a class="btn btn-secondary" id="lbCustom" href="custom.html">✏️ Custom one like this</a>
+        </div>
       </div>
     </div>
   </div>
@@ -254,6 +262,7 @@
     const lbTitle = document.getElementById('lbTitle');
     const lbClose = document.getElementById('lbClose');
     const lbCustom = document.getElementById('lbCustom');
+    const lbOrder  = document.getElementById('lbOrder');
 
     function buildGallery() {
       if (galleryImages.length === 0) {
@@ -289,6 +298,7 @@
       lbImg.src   = `gallery/${item.src}`;
       lbImg.alt   = item.title;
       lbTitle.textContent = `${item.title} · ${item.price}`;
+      lbOrder.href  = `custom.html?print=${encodeURIComponent(item.title)}`;
       lbCustom.href = `custom.html?ref=${encodeURIComponent(item.title)}`;
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';

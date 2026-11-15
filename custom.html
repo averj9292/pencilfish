@@ -95,6 +95,23 @@
 
     .hp { position: absolute; left: -9999px; }
 
+    .print-summary {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--teal-light);
+      border-radius: 14px;
+      padding: 0.75rem;
+      margin-bottom: 1.4rem;
+    }
+    .print-summary[hidden], .custom-only[hidden] { display: none !important; }
+    .print-summary img {
+      width: 84px; height: 84px; object-fit: cover;
+      border-radius: 10px; border: 2px solid var(--ink);
+    }
+    .print-name  { font-family: 'Kalam', cursive; font-size: 1.3rem; font-weight: 700; line-height: 1.2; }
+    .print-price { font-weight: 700; color: var(--teal-dark); }
+
     .product-picks {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -179,13 +196,13 @@
 
   <main>
     <div class="custom-wrap">
-      <h1>✏️ Ask Max to make something!</h1>
-      <p class="custom-intro">
+      <h1 id="pageTitle">✏️ Ask Max to make something!</h1>
+      <p class="custom-intro" id="pageIntro">
         Your pet, your favourite animal, a made-up creature? Pick what you'd like,
         tell us your idea, and we'll get back to you with a price.
       </p>
 
-      <div class="product-picks">
+      <div class="product-picks custom-only">
         <button type="button" class="product-pick" data-item="drawing">
           <span class="pick-emoji">🖍️</span><span class="pick-name">Drawing</span>
           <span class="pick-sub">Original on paper or digital</span>
@@ -204,7 +221,17 @@
         <!-- FormSubmit (free, supports photos). The endpoint is set in the script below (FORM_ID),
              not here, so spam bots that only read the HTML never find it. -->
         <form id="customForm" method="POST" enctype="multipart/form-data" target="fsFrame">
-          <input type="hidden" name="_subject" value="New custom request | Pencil Fish Studio" />
+          <input type="hidden" name="_subject" id="subject" value="New custom request | Pencil Fish Studio" />
+          <input type="hidden" name="request_type" id="requestType" value="Custom piece" />
+
+          <div class="print-summary print-only" id="printSummary" hidden>
+            <img id="printImg" src="" alt="" />
+            <div>
+              <div class="print-name" id="printName"></div>
+              <div class="print-price" id="printPrice"></div>
+            </div>
+            <input type="hidden" name="print" id="printField" disabled />
+          </div>
           <input type="hidden" name="_template" value="table" />
           <input type="hidden" name="_captcha" value="false" />
           <input type="hidden" name="_blacklist" value="crypto, bitcoin, seo, backlinks, casino, viagra, loan, forex, ranking" />
@@ -222,13 +249,13 @@
           </div>
 
           <div class="field">
-            <label for="idea">What should Max draw?</label>
+            <label for="idea" id="ideaLabel">What should Max draw?</label>
             <textarea id="idea" name="idea" required
               placeholder="e.g. My dog Biscuit wearing a superhero cape"></textarea>
           </div>
 
           <div class="field-row">
-            <div class="field">
+            <div class="field custom-only">
               <label for="item">What would you like?</label>
               <select id="item" name="item">
                 <option value="Drawing on paper">Drawing on paper</option>
@@ -244,17 +271,17 @@
             </div>
           </div>
 
-          <div class="field">
+          <div class="field custom-only">
             <label for="needed_by">Needed by <span class="optional">(optional)</span></label>
             <input id="needed_by" name="needed_by" type="text" placeholder="e.g. a birthday in December" />
           </div>
 
-          <div class="field">
+          <div class="field custom-only">
             <label for="ref">Saw a piece you liked? <span class="optional">(optional)</span></label>
             <input id="ref" name="inspired_by" type="text" placeholder="e.g. Giraffe" />
           </div>
 
-          <div class="field">
+          <div class="field custom-only">
             <label for="photos">Photos to work from <span class="optional">(optional, up to 3)</span></label>
             <input id="photos" name="attachment" type="file" accept="image/*" multiple />
             <div class="photo-previews" id="photoPreviews"></div>
@@ -269,7 +296,7 @@
         <div class="form-msg" id="formThanks">
           <div class="big">🎉</div>
           <h2>Got it, thank you!</h2>
-          <p>We'll email you soon to talk about your drawing.</p>
+          <p id="thanksText">We'll email you soon to talk about your drawing.</p>
           <br>
           <a class="btn btn-secondary" href="gallery.html">Back to the Gallery</a>
         </div>
@@ -289,6 +316,7 @@
     <p style="margin-top:0.3rem; opacity:0.6;">© Pencil Fish Studio</p>
   </footer>
 
+  <script src="gallery-data.js"></script>
   <script>
     const form     = document.getElementById('customForm');
     const btn      = document.getElementById('submitBtn');
@@ -328,8 +356,42 @@
     itemSel.addEventListener('change', highlightPick);
     choose(params.get('item') || 'drawing');
 
-    // Pre-fill "Saw a piece you liked?" when coming from the gallery (?ref=Giraffe)
-    if (params.get('ref')) document.getElementById('ref').value = params.get('ref');
+    // Custom "one like this" from the gallery (?ref=Giraffe)
+    const ref = params.get('ref');
+    if (ref) {
+      document.getElementById('ref').value = ref;
+      document.getElementById('idea').placeholder = `e.g. One like the ${ref}, but with my cat`;
+    }
+
+    // ── Print order mode (?print=Giraffe): price comes from the gallery list, not the URL ──
+    const printTitle = params.get('print');
+    const printItem  = printTitle && (typeof galleryImages !== 'undefined' ? galleryImages : []).find(g => g.title === printTitle);
+    if (printItem) {
+      document.title = `Order a Print | Pencil Fish Studio`;
+      document.getElementById('pageTitle').textContent = '🖼️ Order a print';
+      document.getElementById('pageIntro').textContent =
+        "Fill this in and we'll email you to arrange payment and pickup or delivery.";
+      document.querySelectorAll('.custom-only').forEach(el => el.hidden = true);
+      document.getElementById('printSummary').hidden = false;
+      document.getElementById('printImg').src = `gallery/${encodeURIComponent(printItem.src)}`;
+      document.getElementById('printImg').alt = printItem.title;
+      document.getElementById('printName').textContent = printItem.title;
+      document.getElementById('printPrice').textContent = `${printItem.price} each`;
+      const pf = document.getElementById('printField');
+      pf.disabled = false;
+      pf.value = `${printItem.title} (${printItem.price})`;
+      itemSel.disabled = true; // custom-only field: don't send it
+      document.getElementById('subject').value = `New print order: ${printItem.title} | Pencil Fish Studio`;
+      document.getElementById('requestType').value = 'Print order';
+      const idea = document.getElementById('idea');
+      idea.required = false;
+      idea.placeholder = 'Pickup at a fair, delivery, a gift note... anything we should know';
+      document.getElementById('ideaLabel').innerHTML = 'Anything else? <span class="optional">(optional)</span>';
+      document.getElementById('thanksText').textContent =
+        "We'll email you soon to arrange payment and pickup.";
+      btn.textContent = 'Order my print 🐟';
+    }
+    const BTN_LABEL = btn.textContent;
 
     // Shrink phone photos so the email stays small (max 1600px, JPEG)
     const MAX_PHOTOS = 3, MAX_PX = 1600;
@@ -389,7 +451,7 @@
       errEl.textContent = "Sorry, that didn't send. Please try again, or message us on Instagram.";
       errEl.style.display = 'block';
       btn.disabled = false;
-      btn.textContent = 'Send my request 🐟';
+      btn.textContent = BTN_LABEL;
     }
 
     frame.addEventListener('load', () => {

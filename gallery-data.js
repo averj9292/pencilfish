@@ -9,6 +9,6 @@ const galleryImages = [
   { src: "panda.jpg", title: "Panda", price: "$10" },
   { src: "lion.jpg", title: "Lion", price: "$10" },
   { src: "elephant.jpg", title: "Elephant", price: "$10" },
-  { src: "apple.jpg", title: "Apple", price: "$10" },
+  { src: "apple.jpg", title: "Ornament", price: "$10" },
   { src: "santa.jpg", title: "Santa", price: "$10" }
 ];

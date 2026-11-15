@@ -192,6 +192,17 @@
     .chip:hover { transform: translateY(-2px); }
     .chip.selected { border-color: var(--ink); box-shadow: 3px 3px 0 var(--teal); background: var(--teal-light); }
 
+    .size-note {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 0.6rem;
+      font-size: 0.8rem;
+      color: var(--teal-dark);
+      line-height: 1.35;
+    }
+    .size-note .pf-icon { width: 1.1rem; height: 1.1rem; opacity: 0.85; }
+
     /* Estimated total */
     .total {
       display: grid;
@@ -377,6 +388,10 @@
           <div class="field" data-path="max kids">
             <label id="formatLabel">Make it a…</label>
             <div class="chips" id="formatChips" role="radiogroup" aria-labelledby="formatLabel"></div>
+            <p class="size-note" id="sizeNote" hidden>
+              <i data-icon="frame"></i>
+              <span>Small and sweet: about 3 inches across, so very fine details may soften a little.</span>
+            </p>
           </div>
 
           <!-- ── Custom drawing ── -->
@@ -617,6 +632,8 @@
         b.setAttribute('aria-checked', on);
         if (b.dataset.format === 'print') b.querySelector('.chip-price').textContent = money(printPrice(piece));
       });
+
+      document.getElementById('sizeNote').hidden = !(format === 'frame' || format === 'ornament');
 
       const each  = priceEach();
       const n     = Math.min(50, Math.max(1, parseInt(qty.value, 10) || 1));

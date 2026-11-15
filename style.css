@@ -10,6 +10,9 @@
   --gold:       #e8b84b;
   --warm-white: #fefcf8;
   --shadow:     rgba(44, 58, 74, 0.12);
+  --coral:       #ef9a7d;
+  --coral-light: #fbe6de;
+  --coral-dark:  #c0604a;
 }
 
 /* ── Reset ───────────────────────────────────── */
@@ -203,4 +206,128 @@ footer .star { color: var(--gold); }
 @media (max-width: 480px) {
   nav { flex-direction: column; gap: 0.4rem; }
   .nav-links { flex-wrap: wrap; justify-content: center; }
+}
+
+/* ── Hand-drawn icons (icons.js) ─────────────── */
+.pf-icon {
+  width: 1.25em;
+  height: 1.25em;
+  display: inline-block;
+  vertical-align: -0.25em;
+  flex-shrink: 0;
+  overflow: visible;
+}
+.pf-icon * {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.pf-icon .t     { fill: var(--teal-light); }
+.pf-icon .tt    { fill: var(--teal); }
+.pf-icon .g     { fill: var(--gold); }
+.pf-icon .w     { fill: var(--warm-white); }
+.pf-icon .r     { fill: var(--coral); }
+.pf-icon .rl    { fill: var(--coral-light); }
+.pf-icon .k     { fill: var(--ink); }
+.pf-icon .n     { stroke: none; }
+.pf-icon .thick { stroke-width: 2.8; }
+
+.pf-icon.lg  { width: 2.6rem; height: 2.6rem; }
+.pf-icon.xl  { width: 3.6rem; height: 3.6rem; }
+.pf-icon.wiggle { animation: wiggle 2.4s ease-in-out infinite; transform-origin: 50% 60%; }
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-6deg); }
+  50%      { transform: rotate(6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-icon.wiggle { animation: none; }
+}
+
+/* Icons inside buttons and headings line up with the text */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+}
+.btn .pf-icon { width: 1.35em; height: 1.35em; vertical-align: 0; }
+
+.icon-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35em;
+}
+.icon-title .pf-icon { width: 1.05em; height: 1.05em; }
+
+.star .pf-icon, .pf-icon.star-icon { width: 0.95em; height: 0.95em; vertical-align: -0.12em; }
+
+/* ── Notices: errors and success, in studio style ─ */
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.75rem 1rem;
+  border-radius: 14px;
+  border: 2px dashed var(--coral-dark);
+  background: var(--coral-light);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  text-align: left;
+}
+.notice .pf-icon { width: 1.9rem; height: 1.9rem; }
+.notice.ok { border-color: var(--teal); background: var(--teal-light); }
+
+/* Field-level validation */
+.field.invalid input,
+.field.invalid textarea,
+.field.invalid select {
+  border-color: var(--coral-dark) !important;
+  background: #fff7f4 !important;
+}
+.field-msg {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--coral-dark);
+}
+.field-msg .pf-icon { width: 1.15rem; height: 1.15rem; }
+
+/* Custom select arrow */
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M9 12.6 Q12.6 16.4 16 20 Q19.4 16.4 23 12.4' fill='none' stroke='%232c3a4a' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.7rem center !important;
+  background-size: 1.1rem !important;
+  padding-right: 2.4rem !important;
+  cursor: pointer;
+}
+
+/* Visually hidden but still usable by screen readers / keyboards */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard focus ring, consistent everywhere */
+a:focus-visible, button:focus-visible, .btn:focus-visible,
+label:focus-within.photo-drop {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
 }

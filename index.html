@@ -137,7 +137,7 @@
     }
 
     .make-card:hover { transform: translateY(-4px); box-shadow: 4px 8px 0 var(--ink); }
-    .make-emoji { font-size: 2.4rem; margin-bottom: 0.4rem; }
+    .make-emoji { margin-bottom: 0.5rem; line-height: 0; }
     .make-card h3 { font-family: 'Kalam', cursive; font-size: 1.2rem; margin-bottom: 0.3rem; }
     .make-card p { font-size: 0.9rem; color: var(--teal-dark); }
 
@@ -160,7 +160,10 @@
       padding: 1.5rem 1rem;
     }
 
-    .why-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .why-icon { margin-bottom: 0.5rem; line-height: 0; }
+
+    .hero-tagline .tag-icons { white-space: nowrap; }
+    .hero-tagline .pf-icon { width: 0.95em; height: 0.95em; vertical-align: -0.1em; margin-left: 0.08em; }
 
     .why-card h3 {
       font-family: 'Kalam', cursive;
@@ -214,21 +217,21 @@
       <div class="blob blob-1"></div>
       <div class="blob blob-2"></div>
       <img class="hero-logo" src="assets/logo.png" alt="Pencil Fish Studio" />
-      <h1 class="hero-tagline">Art made with<br>heart ✏️🐟</h1>
+      <h1 class="hero-tagline">Art made with<br>heart <span class="tag-icons"><i data-icon="pencil" class="wiggle"></i><i data-icon="fish"></i></span></h1>
       <p class="hero-sub">
         Original drawings and prints by Max, a 7-year-old artist
         who draws every single day.
       </p>
       <div class="hero-buttons">
-        <a class="btn btn-primary" href="gallery.html">🖼️ Shop Prints</a>
-        <a class="btn btn-secondary" href="custom.html">✏️ Order Something Custom</a>
+        <a class="btn btn-primary" href="gallery.html"><i data-icon="frame"></i>Shop Prints</a>
+        <a class="btn btn-secondary" href="custom.html"><i data-icon="pencil"></i>Order Something Custom</a>
       </div>
     </section>
 
     <!-- Featured Artwork -->
     <section class="featured">
       <div class="section">
-        <h2 class="section-title"><span class="star">★</span> Fresh from the Studio</h2>
+        <h2 class="section-title"><span class="star"><i data-icon="star"></i></span> Fresh from the Studio</h2>
         <p class="section-sub">New drawings added all the time.</p>
         <div class="featured-grid" id="featuredGrid">
           <!-- filled by script below -->
@@ -242,21 +245,21 @@
     <!-- Custom pieces -->
     <section class="makes">
       <div class="section">
-        <h2 class="section-title"><span class="star">★</span> Made just for you</h2>
+        <h2 class="section-title"><span class="star"><i data-icon="star"></i></span> Made just for you</h2>
         <p class="section-sub">Pick one and tell Max what to draw.</p>
         <div class="makes-grid">
           <a class="make-card" href="custom.html?item=drawing">
-            <div class="make-emoji">🖍️</div>
+            <div class="make-emoji"><i data-icon="pencil" class="xl"></i></div>
             <h3>Custom Drawings</h3>
             <p>Your pet, your favourite animal, or something totally made up.</p>
           </a>
           <a class="make-card" href="custom.html?item=magnet">
-            <div class="make-emoji">🧲</div>
+            <div class="make-emoji"><i data-icon="magnet" class="xl"></i></div>
             <h3>Magnets</h3>
             <p>Max's art for your fridge. Great little gifts.</p>
           </a>
           <a class="make-card" href="custom.html?item=ornament">
-            <div class="make-emoji">🎄</div>
+            <div class="make-emoji"><i data-icon="ornament" class="xl"></i></div>
             <h3>Ornaments</h3>
             <p>One-of-a-kind decorations for the tree.</p>
           </a>
@@ -270,17 +273,17 @@
         <h2 class="section-title">Why people love Pencil Fish</h2>
         <div class="why-grid">
           <div class="why-card">
-            <div class="why-icon">🎨</div>
+            <div class="why-icon"><i data-icon="palette" class="lg"></i></div>
             <h3>100% Original</h3>
             <p>Every piece is drawn by hand. No two are exactly the same.</p>
           </div>
           <div class="why-card">
-            <div class="why-icon">💛</div>
+            <div class="why-icon"><i data-icon="heart" class="lg"></i></div>
             <h3>Made with Love</h3>
             <p>Max draws because he loves it. That energy goes into every line.</p>
           </div>
           <div class="why-card">
-            <div class="why-icon">✏️</div>
+            <div class="why-icon"><i data-icon="pencil" class="lg"></i></div>
             <h3>Custom Requests</h3>
             <p>Drawings, magnets and ornaments made to order. <a href="custom.html" style="color:var(--teal-dark);font-weight:700;text-decoration:underline;">Ask Max!</a></p>
           </div>
@@ -298,10 +301,11 @@
         @pencilfishstudio
       </a>
     </div>
-    <p><span class="star">★</span> Imagination. Creativity. A Future. <span class="star">★</span></p>
+    <p><span class="star"><i data-icon="star"></i></span> Imagination. Creativity. A Future. <span class="star"><i data-icon="star"></i></span></p>
     <p style="margin-top:0.3rem; opacity:0.6;">© Pencil Fish Studio</p>
   </footer>
 
+  <script src="icons.js"></script>
   <script src="gallery-data.js"></script>
   <script>
     // Populate the featured grid with the first 3 gallery images
@@ -313,14 +317,14 @@
       if (items.length === 0) {
         // Show placeholder cards until artwork is added
         const placeholders = [
-          { emoji: '🐟', label: 'Coming soon…' },
-          { emoji: '🌊', label: 'Coming soon…' },
-          { emoji: '✏️', label: 'Coming soon…' },
+          { icon: 'fish', label: 'Coming soon…' },
+          { icon: 'wave', label: 'Coming soon…' },
+          { icon: 'pencil', label: 'Coming soon…' },
         ];
         placeholders.forEach(p => {
           grid.innerHTML += `
             <div class="featured-card">
-              <div class="placeholder">${p.emoji}</div>
+              <div class="placeholder">${pfIcon(p.icon, 'xl')}</div>
               <div class="featured-card-label">${p.label}</div>
             </div>`;
         });

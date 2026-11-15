@@ -137,7 +137,7 @@
 
     .product-pick:hover { transform: translateY(-2px); }
     .product-pick.selected { border-color: var(--teal); box-shadow: 3px 3px 0 var(--teal); }
-    .pick-emoji { font-size: 2rem; }
+    .pick-emoji { line-height: 0; margin-bottom: 0.3rem; }
     .pick-name  { font-family: 'Kalam', cursive; font-size: 1.15rem; font-weight: 700; }
     .pick-sub   { font-size: 0.78rem; color: var(--teal-dark); line-height: 1.3; }
 
@@ -160,17 +160,63 @@
       padding: 2rem 1rem;
     }
 
-    .form-msg .big { font-size: 3rem; }
+    .form-msg .big { line-height: 0; margin-bottom: 0.5rem; }
     .form-msg h2 { font-family: 'Kalam', cursive; font-size: 1.6rem; margin: 0.5rem 0; }
     .form-msg p { color: var(--teal-dark); }
 
-    .form-error {
-      display: none;
-      color: #c0604a;
-      font-size: 0.9rem;
-      margin-top: 0.75rem;
-      text-align: center;
+    .form-error { display: none; margin-top: 1rem; }
+
+    /* Photo picker */
+    .field .photo-drop {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.9rem 1rem;
+      border: 2.5px dashed var(--teal);
+      border-radius: 14px;
+      background: var(--teal-light);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
+    .photo-drop:hover { background: #c7e0e5; border-color: var(--teal-dark); }
+    #photos:focus-visible + .photo-drop { outline: 3px solid var(--gold); outline-offset: 3px; }
+    .photo-drop strong { display: block; font-family: 'Kalam', cursive; font-size: 1.1rem; line-height: 1.2; }
+    .photo-drop small  { display: block; color: var(--teal-dark); font-size: 0.8rem; }
+
+    /* Quantity stepper */
+    .qty {
+      display: flex;
+      align-items: stretch;
+      border: 2px solid var(--teal-light);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--bg);
+    }
+    .qty input {
+      border: none !important;
+      border-radius: 0 !important;
+      text-align: center;
+      font-weight: 700;
+      -moz-appearance: textfield;
+      appearance: textfield;
+      min-width: 0;
+    }
+    .qty input::-webkit-outer-spin-button,
+    .qty input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .qty-btn {
+      width: 2.8rem;
+      flex-shrink: 0;
+      border: none;
+      background: var(--teal-light);
+      color: var(--ink);
+      font-family: 'Kalam', cursive;
+      font-size: 1.4rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .qty-btn:hover { background: #c7e0e5; }
+    .qty:focus-within { border-color: var(--teal); }
 
     @media (max-width: 500px) {
       .field-row { grid-template-columns: 1fr; gap: 0; }
@@ -196,7 +242,7 @@
 
   <main>
     <div class="custom-wrap">
-      <h1 id="pageTitle">✏️ Ask Max to make something!</h1>
+      <h1 id="pageTitle"><i data-icon="pencil" class="wiggle"></i> Ask Max to make something!</h1>
       <p class="custom-intro" id="pageIntro">
         Your pet, your favourite animal, a made-up creature? Pick what you'd like,
         tell us your idea, and we'll get back to you with a price.
@@ -204,15 +250,15 @@
 
       <div class="product-picks custom-only">
         <button type="button" class="product-pick" data-item="drawing">
-          <span class="pick-emoji">🖍️</span><span class="pick-name">Drawing</span>
+          <span class="pick-emoji"><i data-icon="pencil" class="lg"></i></span><span class="pick-name">Drawing</span>
           <span class="pick-sub">Original on paper or digital</span>
         </button>
         <button type="button" class="product-pick" data-item="magnet">
-          <span class="pick-emoji">🧲</span><span class="pick-name">Magnet</span>
+          <span class="pick-emoji"><i data-icon="magnet" class="lg"></i></span><span class="pick-name">Magnet</span>
           <span class="pick-sub">Max's art for your fridge</span>
         </button>
         <button type="button" class="product-pick" data-item="ornament">
-          <span class="pick-emoji">🎄</span><span class="pick-name">Ornament</span>
+          <span class="pick-emoji"><i data-icon="ornament" class="lg"></i></span><span class="pick-name">Ornament</span>
           <span class="pick-sub">A one-of-a-kind tree decoration</span>
         </button>
       </div>
@@ -220,7 +266,7 @@
       <div class="form-card">
         <!-- FormSubmit (free, supports photos). The endpoint is set in the script below (FORM_ID),
              not here, so spam bots that only read the HTML never find it. -->
-        <form id="customForm" method="POST" enctype="multipart/form-data" target="fsFrame">
+        <form id="customForm" novalidate method="POST" enctype="multipart/form-data" target="fsFrame">
           <input type="hidden" name="_subject" id="subject" value="New custom request | Pencil Fish Studio" />
           <input type="hidden" name="request_type" id="requestType" value="Custom piece" />
 
@@ -267,7 +313,11 @@
             </div>
             <div class="field">
               <label for="quantity">How many?</label>
-              <input id="quantity" name="quantity" type="number" min="1" max="50" value="1" />
+              <div class="qty">
+                <button type="button" class="qty-btn" data-step="-1" aria-label="One less">&minus;</button>
+                <input id="quantity" name="quantity" type="number" min="1" max="50" value="1" inputmode="numeric" />
+                <button type="button" class="qty-btn" data-step="1" aria-label="One more">+</button>
+              </div>
             </div>
           </div>
 
@@ -283,18 +333,22 @@
 
           <div class="field custom-only">
             <label for="photos">Photos to work from <span class="optional">(optional, up to 3)</span></label>
-            <input id="photos" name="attachment" type="file" accept="image/*" multiple />
+            <input id="photos" class="sr-only" name="attachment" type="file" accept="image/*" multiple />
+            <label class="photo-drop" for="photos">
+              <i data-icon="camera" class="lg"></i>
+              <span><strong>Add photos</strong><small>Tap to choose from your phone or computer</small></span>
+            </label>
             <div class="photo-previews" id="photoPreviews"></div>
           </div>
 
-          <button class="btn btn-primary" type="submit" id="submitBtn">Send my request 🐟</button>
-          <p class="form-error" id="formError"></p>
+          <button class="btn btn-primary" type="submit" id="submitBtn">Send my request <i data-icon="fish"></i></button>
+          <div class="notice form-error" id="formError" role="alert"></div>
         </form>
 
         <iframe name="fsFrame" id="fsFrame" title="Form sender" hidden></iframe>
 
         <div class="form-msg" id="formThanks">
-          <div class="big">🎉</div>
+          <div class="big"><i data-icon="party" class="xl wiggle"></i></div>
           <h2>Got it, thank you!</h2>
           <p id="thanksText">We'll email you soon to talk about your drawing.</p>
           <br>
@@ -312,10 +366,11 @@
         @pencilfishstudio
       </a>
     </div>
-    <p><span class="star">★</span> Imagination. Creativity. A Future. <span class="star">★</span></p>
+    <p><span class="star"><i data-icon="star"></i></span> Imagination. Creativity. A Future. <span class="star"><i data-icon="star"></i></span></p>
     <p style="margin-top:0.3rem; opacity:0.6;">© Pencil Fish Studio</p>
   </footer>
 
+  <script src="icons.js"></script>
   <script src="gallery-data.js"></script>
   <script>
     const form     = document.getElementById('customForm');
@@ -325,6 +380,67 @@
     const photos   = document.getElementById('photos');
     const previews = document.getElementById('photoPreviews');
     const params   = new URLSearchParams(location.search);
+
+    function setErr(msg) {
+      errEl.innerHTML = pfIcon('alert') + '<span></span>';
+      errEl.querySelector('span').textContent = msg;
+      errEl.style.display = 'flex';
+    }
+
+    // ── Quantity stepper ──
+    const qty = document.getElementById('quantity');
+    document.querySelectorAll('.qty-btn').forEach(b => b.addEventListener('click', () => {
+      const v = Math.min(50, Math.max(1, (parseInt(qty.value, 10) || 1) + Number(b.dataset.step)));
+      qty.value = v;
+    }));
+    qty.addEventListener('change', () => {
+      qty.value = Math.min(50, Math.max(1, parseInt(qty.value, 10) || 1));
+    });
+
+    // ── Friendly field checks (instead of the browser's grey pop-ups) ──
+    const MESSAGES = {
+      name:  { missing: 'Please add your name' },
+      email: { missing: 'We need your email so we can reply', bad: "That email doesn't look quite right" },
+      idea:  { missing: 'Tell Max what you would like drawn' },
+    };
+
+    function clearInvalid(field) {
+      field.classList.remove('invalid');
+      const m = field.querySelector('.field-msg');
+      if (m) m.remove();
+    }
+
+    function markInvalid(input, text) {
+      const field = input.closest('.field');
+      clearInvalid(field);
+      field.classList.add('invalid');
+      const m = document.createElement('p');
+      m.className = 'field-msg';
+      m.innerHTML = pfIcon('alert') + '<span></span>';
+      m.querySelector('span').textContent = text;
+      field.appendChild(m);
+    }
+
+    function validate() {
+      let first = null;
+      ['name', 'email', 'idea'].forEach(id => {
+        const el = document.getElementById(id);
+        clearInvalid(el.closest('.field'));
+        const empty = el.required && !el.value.trim();
+        const bad   = id === 'email' && el.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+        if (empty || bad) {
+          markInvalid(el, empty ? MESSAGES[id].missing : MESSAGES[id].bad);
+          first = first || el;
+        }
+      });
+      if (first) first.focus();
+      return !first;
+    }
+
+    ['name', 'email', 'idea'].forEach(id => {
+      const el = document.getElementById(id);
+      el.addEventListener('input', () => clearInvalid(el.closest('.field')));
+    });
 
     // Back from FormSubmit after a successful send
     if (params.get('sent')) {
@@ -368,7 +484,7 @@
     const printItem  = printTitle && (typeof galleryImages !== 'undefined' ? galleryImages : []).find(g => g.title === printTitle);
     if (printItem) {
       document.title = `Order a Print | Pencil Fish Studio`;
-      document.getElementById('pageTitle').textContent = '🖼️ Order a print';
+      document.getElementById('pageTitle').innerHTML = pfIcon('frame', 'wiggle') + ' Order a print';
       document.getElementById('pageIntro').textContent =
         "Fill this in and we'll email you to arrange payment and pickup or delivery.";
       document.querySelectorAll('.custom-only').forEach(el => el.hidden = true);
@@ -389,9 +505,9 @@
       document.getElementById('ideaLabel').innerHTML = 'Anything else? <span class="optional">(optional)</span>';
       document.getElementById('thanksText').textContent =
         "We'll email you soon to arrange payment and pickup.";
-      btn.textContent = 'Order my print 🐟';
+      btn.innerHTML = 'Order my print ' + pfIcon('fish');
     }
-    const BTN_LABEL = btn.textContent;
+    const BTN_LABEL = btn.innerHTML;
 
     // Shrink phone photos so the email stays small (max 1600px, JPEG)
     const MAX_PHOTOS = 3, MAX_PX = 1600;
@@ -419,8 +535,7 @@
       errEl.style.display = 'none';
       let files = Array.from(photos.files).filter(f => f.type.startsWith('image/') || /\.heic$/i.test(f.name));
       if (files.length > MAX_PHOTOS) {
-        errEl.textContent = `Only the first ${MAX_PHOTOS} photos will be sent.`;
-        errEl.style.display = 'block';
+        setErr(`Only the first ${MAX_PHOTOS} photos will be sent.`);
         files = files.slice(0, MAX_PHOTOS);
       }
       btn.disabled = true;
@@ -448,10 +563,9 @@
     function showError() {
       sending = false;
       clearTimeout(timer);
-      errEl.textContent = "Sorry, that didn't send. Please try again, or message us on Instagram.";
-      errEl.style.display = 'block';
+      setErr("Sorry, that didn't send. Please try again, or message us on Instagram.");
       btn.disabled = false;
-      btn.textContent = BTN_LABEL;
+      btn.innerHTML = BTN_LABEL;
     }
 
     frame.addEventListener('load', () => {
@@ -464,6 +578,7 @@
     });
 
     form.addEventListener('submit', (e) => {
+      if (!validate()) { e.preventDefault(); return; }
       // Bots fill forms instantly; people take more than a few seconds
       if (Date.now() - loadedAt < 4000) { e.preventDefault(); return; }
       form.action = 'https://formsubmit.co/' + FORM_ID;

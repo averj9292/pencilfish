@@ -45,7 +45,10 @@
 
     /* Little floating stars */
     .portrait-ring::after {
-      content: '★';
+      content: '';
+      width: 2.2rem;
+      height: 2.2rem;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3.6 L19.7 11.2 L28.1 12.3 L21.9 18 L23.6 26.3 L16 22.2 L8.5 26.4 L10.1 18 L3.9 12.2 L12.3 11.2 Z' fill='%23e8b84b' stroke='%232c3a4a' stroke-width='1.9' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center / contain;
       position: absolute;
       bottom: 10px;
       right: -10px;
@@ -111,7 +114,7 @@
       text-align: center;
     }
 
-    .fact-card .fact-emoji { font-size: 1.8rem; margin-bottom: 0.4rem; }
+    .fact-card .fact-emoji { margin-bottom: 0.4rem; line-height: 0; }
     .fact-card p { font-size: 0.88rem; color: var(--ink); }
 
     /* ── Connect section ────────────────────── */
@@ -185,7 +188,7 @@
           <img src="assets/portrait.png" alt="Max, the artist behind Pencil Fish Studio" />
         </div>
         <div class="about-text">
-          <h1>Hey, I'm Max! <span style="color:var(--teal)">👋</span></h1>
+          <h1>Hey, I'm Max! <i data-icon="hi" class="wiggle"></i></h1>
           <p class="subtitle">Artist · Age 7 · Pencil Fish Studio</p>
           <p>
             I started drawing when I was really little, and now I draw
@@ -199,7 +202,7 @@
           </p>
           <p>
             Every piece here is one I drew myself. I hope you find
-            something you love. ✏️🐟
+            something you love. <i data-icon="pencil"></i><i data-icon="fish"></i>
           </p>
           <a class="btn btn-primary" href="gallery.html">See My Art</a>
         </div>
@@ -207,22 +210,22 @@
 
       <!-- Fun facts -->
       <div class="fun-facts">
-        <h2><span style="color:var(--gold)">★</span> A few things about me</h2>
+        <h2><span class="star"><i data-icon="star"></i></span> A few things about me</h2>
         <div class="facts-grid">
           <div class="fact-card">
-            <div class="fact-emoji">🎨</div>
+            <div class="fact-emoji"><i data-icon="palette" class="lg"></i></div>
             <p>I draw something new almost every day</p>
           </div>
           <div class="fact-card">
-            <div class="fact-emoji">✏️</div>
+            <div class="fact-emoji"><i data-icon="pencil" class="lg"></i></div>
             <p>Pencils are my favourite, but I also love markers</p>
           </div>
           <div class="fact-card">
-            <div class="fact-emoji">🐟</div>
+            <div class="fact-emoji"><i data-icon="fish" class="lg"></i></div>
             <p>Fish was the first thing I ever drew that I was really proud of</p>
           </div>
           <div class="fact-card">
-            <div class="fact-emoji">🌟</div>
+            <div class="fact-emoji"><i data-icon="star" class="lg"></i></div>
             <p>I want to be an artist when I grow up</p>
           </div>
         </div>
@@ -230,7 +233,7 @@
 
       <!-- Connect -->
       <div class="connect">
-        <h2>Come say hi! 👋</h2>
+        <h2 class="icon-title">Come say hi! <i data-icon="hi"></i></h2>
         <p>
           Follow along on Instagram to see new art first, or ask Max to draw
           something just for you.
@@ -242,7 +245,7 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="2.5"
                  stroke-linecap="round" stroke-linejoin="round"
-                 style="display:inline;vertical-align:middle;margin-right:5px;">
+                 >
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
               <circle cx="12" cy="12" r="5"/>
               <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/>
@@ -250,7 +253,7 @@
             @pencilfishstudio
           </a>
           <a class="btn btn-primary" href="custom.html">
-            ✏️ Request Custom Art
+            <i data-icon="pencil"></i>Request Custom Art
           </a>
         </div>
       </div>
@@ -266,9 +269,10 @@
         @pencilfishstudio
       </a>
     </div>
-    <p><span class="star">★</span> Imagination. Creativity. A Future. <span class="star">★</span></p>
+    <p><span class="star"><i data-icon="star"></i></span> Imagination. Creativity. A Future. <span class="star"><i data-icon="star"></i></span></p>
     <p style="margin-top:0.3rem; opacity:0.6;">© Pencil Fish Studio</p>
   </footer>
 
+  <script src="icons.js"></script>
 </body>
 </html>

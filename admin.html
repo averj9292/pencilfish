@@ -139,7 +139,7 @@
       height: 100%;
     }
 
-    .drop-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .drop-icon { margin-bottom: 0.5rem; line-height: 0; }
     .drop-zone h3 { font-family: 'Kalam', cursive; font-size: 1.2rem; color: var(--teal-dark); }
     .drop-zone p  { font-size: 0.85rem; color: var(--teal-dark); margin-top: 0.25rem; }
 
@@ -340,7 +340,7 @@
 <body>
 
   <div class="admin-bar">
-    <strong>🐟 Pencil Fish Admin</strong>
+    <strong class="icon-title"><i data-icon="fish"></i>Pencil Fish Admin</strong>
     <span>
       <a href="index.html">← Back to site</a>
       &nbsp;|&nbsp;
@@ -352,7 +352,7 @@
   <div class="screen active" id="screenSetup">
     <div class="setup-wrap">
       <div class="setup-card">
-        <h1>🔑 Connect to GitHub</h1>
+        <h1 class="icon-title"><i data-icon="key"></i>Connect to GitHub</h1>
         <p class="setup-sub">
           Paste your access token to manage the gallery.
         </p>
@@ -380,7 +380,7 @@
         </div>
 
         <div class="setup-actions">
-          <button class="btn btn-primary" onclick="saveSettings()">Connect →</button>
+          <button class="btn btn-primary" onclick="saveSettings()">Connect <i data-icon="arrow"></i></button>
         </div>
 
         <p id="setupError" style="color:#c0604a; font-size:0.85rem; margin-top:0.75rem; display:none;"></p>
@@ -393,11 +393,11 @@
     <div class="admin-wrap">
 
       <div class="admin-header">
-        <h1>🎨 Gallery Manager</h1>
+        <h1 class="icon-title"><i data-icon="palette"></i>Gallery Manager</h1>
         <div class="admin-actions">
-          <button class="btn btn-secondary" onclick="loadGallery()">↻ Refresh</button>
+          <button class="btn btn-secondary" onclick="loadGallery()"><i data-icon="refresh"></i>Refresh</button>
           <button class="btn btn-primary" id="publishBtn" onclick="publishAll()">
-            🚀 Publish Changes
+            <i data-icon="rocket"></i>Publish Changes
           </button>
         </div>
       </div>
@@ -409,7 +409,7 @@
       <!-- Drop zone -->
       <div class="drop-zone" id="dropZone">
         <input type="file" id="fileInput" accept="image/*" multiple />
-        <div class="drop-icon">🖼️</div>
+        <div class="drop-icon"><i data-icon="camera" class="xl"></i></div>
         <h3>Drop Max's artwork here</h3>
         <p>or click to browse. JPG and PNG work great</p>
       </div>
@@ -422,7 +422,7 @@
 
       <!-- Current gallery -->
       <div class="gallery-section">
-        <h2><span style="color:var(--gold)">★</span> Current Gallery (<span id="galleryCount">0</span>)</h2>
+        <h2><span class="star"><i data-icon="star"></i></span> Current Gallery (<span id="galleryCount">0</span>)</h2>
         <div class="gallery-list" id="galleryList">
           <div class="empty-msg">Loading gallery…</div>
         </div>
@@ -434,6 +434,7 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <script src="icons.js"></script>
   <script>
     // ─────────────────────────────────────────────
     //  Config & State
@@ -624,9 +625,9 @@
             <span style="font-size:0.78rem; color:var(--teal-dark); align-self:center;">${escHtml(img.src)}</span>
           </div>
           <div class="gallery-item-btns">
-            <button class="icon-btn" title="Move up"    onclick="moveItem(${i}, -1)">↑</button>
-            <button class="icon-btn" title="Move down"  onclick="moveItem(${i},  1)">↓</button>
-            <button class="icon-btn danger" title="Delete" onclick="deleteItem(${i})">✕</button>
+            <button class="icon-btn" title="Move up"    onclick="moveItem(${i}, -1)">${pfIcon('up')}</button>
+            <button class="icon-btn" title="Move down"  onclick="moveItem(${i},  1)">${pfIcon('down')}</button>
+            <button class="icon-btn danger" title="Delete" onclick="deleteItem(${i})">${pfIcon('close')}</button>
           </div>`;
         list.appendChild(item);
       });
@@ -741,7 +742,7 @@
           <img class="pending-thumb" src="${pf.dataUrl}" alt="${escHtml(pf.title)}" />
           <div class="pending-fields">
             <input class="field-title" type="text" value="${escHtml(pf.title)}"
-                   placeholder="👈 Type a title for this one"
+                   placeholder="Type a title for this one"
                    onchange="pendingFiles[${i}].title = this.value" />
             <input class="field-price" type="text" value="${escHtml(pf.price)}"
                    placeholder="$5"
@@ -750,7 +751,7 @@
               → ${pf.safeFilename}
             </span>
           </div>
-          <button class="pending-remove" onclick="removePending(${i})">✕</button>`;
+          <button class="pending-remove" onclick="removePending(${i})">${pfIcon('close')}</button>`;
         list.appendChild(item);
       });
     }
@@ -814,7 +815,7 @@
         renderPending();
         renderGallery();
 
-        toast('🚀 Published! Your site will update in about a minute.', 'success');
+        toast('Published! Your site will update in about a minute.', 'success');
         setTimeout(() => setProgress(0), 800);
 
       } catch(e) {
@@ -823,7 +824,7 @@
       }
 
       btn.disabled = false;
-      btn.textContent = '🚀 Publish Changes';
+      btn.innerHTML = pfIcon('rocket') + 'Publish Changes';
     }
 
     // ─────────────────────────────────────────────

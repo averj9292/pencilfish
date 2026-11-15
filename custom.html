@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Custom Art | Pencil Fish Studio</title>
-  <meta name="description" content="Request a custom drawing from Max at Pencil Fish Studio: pets, people, creatures, anything you can dream up." />
+  <title>Custom Art, Magnets & Ornaments | Pencil Fish Studio</title>
+  <meta name="description" content="Request a custom drawing, magnet or ornament from Max at Pencil Fish Studio: pets, people, creatures, anything you can dream up." />
   <meta property="og:title" content="Custom Art | Pencil Fish Studio" />
-  <meta property="og:description" content="Request a custom drawing from Max: pets, people, creatures, anything you can dream up." />
+  <meta property="og:description" content="Request a custom drawing, magnet or ornament from Max: pets, people, creatures, anything you can dream up." />
   <meta property="og:image" content="https://pencilfishstudio.ca/assets/logo.png" />
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="assets/logo.png" />
@@ -95,6 +95,40 @@
 
     .hp { position: absolute; left: -9999px; }
 
+    .product-picks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .product-pick {
+      background: var(--warm-white);
+      border: 2.5px solid var(--teal-light);
+      border-radius: 16px;
+      padding: 1rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.15rem;
+      transition: border-color 0.15s, transform 0.15s;
+    }
+
+    .product-pick:hover { transform: translateY(-2px); }
+    .product-pick.selected { border-color: var(--teal); box-shadow: 3px 3px 0 var(--teal); }
+    .pick-emoji { font-size: 2rem; }
+    .pick-name  { font-family: 'Kalam', cursive; font-size: 1.15rem; font-weight: 700; }
+    .pick-sub   { font-size: 0.78rem; color: var(--teal-dark); line-height: 1.3; }
+
+    @media (max-width: 500px) {
+      .product-picks { gap: 0.5rem; }
+      .pick-sub { display: none; }
+    }
+
     .field input[type=file] { padding: 0.5rem; background: var(--warm-white); }
 
     .photo-previews { display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap; }
@@ -145,16 +179,31 @@
 
   <main>
     <div class="custom-wrap">
-      <h1>✏️ Ask Max to draw something!</h1>
+      <h1>✏️ Ask Max to make something!</h1>
       <p class="custom-intro">
-        Your pet, your favourite animal, a made-up creature? Tell us your idea
-        and we'll get back to you with a price.
+        Your pet, your favourite animal, a made-up creature? Pick what you'd like,
+        tell us your idea, and we'll get back to you with a price.
       </p>
+
+      <div class="product-picks">
+        <button type="button" class="product-pick" data-item="drawing">
+          <span class="pick-emoji">🖍️</span><span class="pick-name">Drawing</span>
+          <span class="pick-sub">Original on paper or digital</span>
+        </button>
+        <button type="button" class="product-pick" data-item="magnet">
+          <span class="pick-emoji">🧲</span><span class="pick-name">Magnet</span>
+          <span class="pick-sub">Max's art for your fridge</span>
+        </button>
+        <button type="button" class="product-pick" data-item="ornament">
+          <span class="pick-emoji">🎄</span><span class="pick-name">Ornament</span>
+          <span class="pick-sub">A one-of-a-kind tree decoration</span>
+        </button>
+      </div>
 
       <div class="form-card">
         <!-- FormSubmit (free, supports photos). Destination inbox is in the action URL. -->
         <form id="customForm" action="https://formsubmit.co/hello@pencilfishstudio.ca" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="_subject" value="New custom art request | Pencil Fish Studio" />
+          <input type="hidden" name="_subject" value="New custom request | Pencil Fish Studio" />
           <input type="hidden" name="_template" value="table" />
           <input type="hidden" name="_next" value="https://pencilfishstudio.ca/custom.html?sent=1" />
           <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" />
@@ -178,17 +227,24 @@
 
           <div class="field-row">
             <div class="field">
-              <label for="format">Paper or digital?</label>
-              <select id="format" name="format">
-                <option>Original on paper</option>
-                <option>Digital file</option>
-                <option>Not sure yet</option>
+              <label for="item">What would you like?</label>
+              <select id="item" name="item">
+                <option value="Drawing on paper">Drawing on paper</option>
+                <option value="Digital drawing">Digital drawing</option>
+                <option value="Magnet">Magnet</option>
+                <option value="Ornament">Ornament</option>
+                <option value="Not sure yet">Not sure yet</option>
               </select>
             </div>
             <div class="field">
-              <label for="needed_by">Needed by <span class="optional">(optional)</span></label>
-              <input id="needed_by" name="needed_by" type="text" placeholder="e.g. a birthday in December" />
+              <label for="quantity">How many?</label>
+              <input id="quantity" name="quantity" type="number" min="1" max="50" value="1" />
             </div>
+          </div>
+
+          <div class="field">
+            <label for="needed_by">Needed by <span class="optional">(optional)</span></label>
+            <input id="needed_by" name="needed_by" type="text" placeholder="e.g. a birthday in December" />
           </div>
 
           <div class="field">
@@ -243,6 +299,30 @@
       form.style.display = 'none';
       thanks.style.display = 'block';
     }
+
+    // Product cards: tap one to set "What would you like?" (also works from ?item=magnet links)
+    const itemSel = document.getElementById('item');
+    const picks   = document.querySelectorAll('.product-pick');
+    const ITEM_MAP = { drawing: 'Drawing on paper', magnet: 'Magnet', ornament: 'Ornament' };
+
+    function highlightPick() {
+      const v = itemSel.value;
+      picks.forEach(p => p.classList.toggle('selected',
+        ITEM_MAP[p.dataset.item] === v || (p.dataset.item === 'drawing' && v === 'Digital drawing')));
+    }
+
+    function choose(key) {
+      if (!ITEM_MAP[key]) return;
+      itemSel.value = ITEM_MAP[key];
+      highlightPick();
+    }
+
+    picks.forEach(p => p.addEventListener('click', () => {
+      choose(p.dataset.item);
+      document.getElementById('name').focus();
+    }));
+    itemSel.addEventListener('change', highlightPick);
+    choose(params.get('item') || 'drawing');
 
     // Pre-fill "Saw a piece you liked?" when coming from the gallery (?ref=Giraffe)
     if (params.get('ref')) document.getElementById('ref').value = params.get('ref');

@@ -118,6 +118,29 @@
       margin-top: 2rem;
     }
 
+    /* ── Made just for you ──────────────────── */
+    .makes { text-align: center; }
+
+    .makes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .make-card {
+      background: var(--warm-white);
+      border: 2.5px solid var(--ink);
+      border-radius: 16px;
+      box-shadow: 4px 4px 0 var(--ink);
+      padding: 1.5rem 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .make-card:hover { transform: translateY(-4px); box-shadow: 4px 8px 0 var(--ink); }
+    .make-emoji { font-size: 2.4rem; margin-bottom: 0.4rem; }
+    .make-card h3 { font-family: 'Kalam', cursive; font-size: 1.2rem; margin-bottom: 0.3rem; }
+    .make-card p { font-size: 0.9rem; color: var(--teal-dark); }
+
     /* ── Why buy section ────────────────────── */
     .why {
       text-align: center;
@@ -158,6 +181,7 @@
       .featured-grid { grid-template-columns: 1fr 1fr; }
       .featured-grid .featured-card:last-child { display: none; }
       .why-grid { grid-template-columns: 1fr; }
+      .makes-grid { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 480px) {
@@ -197,7 +221,7 @@
       </p>
       <div class="hero-buttons">
         <a class="btn btn-primary" href="gallery.html">See the Art</a>
-        <a class="btn btn-secondary" href="custom.html">✏️ Request Custom Art</a>
+        <a class="btn btn-secondary" href="custom.html">✏️ Order Something Custom</a>
       </div>
     </section>
 
@@ -211,6 +235,31 @@
         </div>
         <div class="featured-footer">
           <a class="btn btn-primary" href="gallery.html">View Full Gallery</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Custom pieces -->
+    <section class="makes">
+      <div class="section">
+        <h2 class="section-title"><span class="star">★</span> Made just for you</h2>
+        <p class="section-sub">Pick one and tell Max what to draw.</p>
+        <div class="makes-grid">
+          <a class="make-card" href="custom.html?item=drawing">
+            <div class="make-emoji">🖍️</div>
+            <h3>Custom Drawings</h3>
+            <p>Your pet, your favourite animal, or something totally made up.</p>
+          </a>
+          <a class="make-card" href="custom.html?item=magnet">
+            <div class="make-emoji">🧲</div>
+            <h3>Magnets</h3>
+            <p>Max's art for your fridge. Great little gifts.</p>
+          </a>
+          <a class="make-card" href="custom.html?item=ornament">
+            <div class="make-emoji">🎄</div>
+            <h3>Ornaments</h3>
+            <p>One-of-a-kind decorations for the tree.</p>
+          </a>
         </div>
       </div>
     </section>
@@ -233,7 +282,7 @@
           <div class="why-card">
             <div class="why-icon">✏️</div>
             <h3>Custom Requests</h3>
-            <p>Want your pet or a dream creature drawn? <a href="custom.html" style="color:var(--teal-dark);font-weight:700;text-decoration:underline;">Ask Max!</a></p>
+            <p>Drawings, magnets and ornaments made to order. <a href="custom.html" style="color:var(--teal-dark);font-weight:700;text-decoration:underline;">Ask Max!</a></p>
           </div>
         </div>
       </div>

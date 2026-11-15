@@ -201,11 +201,13 @@
       </div>
 
       <div class="form-card">
-        <!-- FormSubmit (free, supports photos). Destination inbox is in the action URL. -->
-        <form id="customForm" action="https://formsubmit.co/hello@pencilfishstudio.ca" method="POST" enctype="multipart/form-data">
+        <!-- FormSubmit (free, supports photos). The endpoint is set in the script below (FORM_ID),
+             not here, so spam bots that only read the HTML never find it. -->
+        <form id="customForm" method="POST" enctype="multipart/form-data" target="fsFrame">
           <input type="hidden" name="_subject" value="New custom request | Pencil Fish Studio" />
           <input type="hidden" name="_template" value="table" />
-          <input type="hidden" name="_next" value="https://pencilfishstudio.ca/custom.html?sent=1" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_blacklist" value="crypto, bitcoin, seo, backlinks, casino, viagra, loan, forex, ranking" />
           <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" />
 
           <div class="field-row">
@@ -261,6 +263,8 @@
           <button class="btn btn-primary" type="submit" id="submitBtn">Send my request 🐟</button>
           <p class="form-error" id="formError"></p>
         </form>
+
+        <iframe name="fsFrame" id="fsFrame" title="Form sender" hidden></iframe>
 
         <div class="form-msg" id="formThanks">
           <div class="big">🎉</div>
@@ -373,9 +377,39 @@
       btn.disabled = false;
     });
 
-    form.addEventListener('submit', () => {
+    // ── Send in the background (hidden iframe) so visitors never leave the site ──
+    const FORM_ID  = 'hello@pencilfishstudio.ca'; // swap for FormSubmit's random alias
+    const loadedAt = Date.now();
+    const frame    = document.getElementById('fsFrame');
+    let sending = false, timer = null;
+
+    function showError() {
+      sending = false;
+      clearTimeout(timer);
+      errEl.textContent = "Sorry, that didn't send. Please try again, or message us on Instagram.";
+      errEl.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Send my request 🐟';
+    }
+
+    frame.addEventListener('load', () => {
+      if (!sending) return; // ignore the iframe's initial blank load
+      sending = false;
+      clearTimeout(timer);
+      form.style.display = 'none';
+      thanks.style.display = 'block';
+      thanks.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+
+    form.addEventListener('submit', (e) => {
+      // Bots fill forms instantly; people take more than a few seconds
+      if (Date.now() - loadedAt < 4000) { e.preventDefault(); return; }
+      form.action = 'https://formsubmit.co/' + FORM_ID;
+      errEl.style.display = 'none';
+      sending = true;
       btn.disabled = true;
       btn.textContent = 'Sending…';
+      timer = setTimeout(showError, 45000);
     });
   </script>
 
